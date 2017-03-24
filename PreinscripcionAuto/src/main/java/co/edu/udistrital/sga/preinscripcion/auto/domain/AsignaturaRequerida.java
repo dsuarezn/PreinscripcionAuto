@@ -2,6 +2,7 @@ package co.edu.udistrital.sga.preinscripcion.auto.domain;
 
 
 import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
+import lombok.Data;
 import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
 
 /**
@@ -10,6 +11,7 @@ import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistab
  * @created 07-feb.-2017 15:56:30
  * fact de listado de asignaturas
  */
+@Data
 public class AsignaturaRequerida extends AbstractPersistable {
 
 	private Asignatura asignatura;
@@ -24,22 +26,6 @@ public class AsignaturaRequerida extends AbstractPersistable {
 
 	}
 
-	public Asignatura getAsignatura() {
-		return asignatura;
-	}
-
-	public void setAsignatura(Asignatura asignatura) {
-		this.asignatura = asignatura;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-	
 	
 	
 	

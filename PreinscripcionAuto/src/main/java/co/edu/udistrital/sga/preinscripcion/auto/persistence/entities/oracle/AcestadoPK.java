@@ -3,10 +3,13 @@ package co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import lombok.Data;
+
 /**
  * The primary key class for the ACESTADO database table.
  * 
  */
+@Data
 @Embeddable
 public class AcestadoPK implements Serializable {
 	//default serial version id, required for serializable classes.

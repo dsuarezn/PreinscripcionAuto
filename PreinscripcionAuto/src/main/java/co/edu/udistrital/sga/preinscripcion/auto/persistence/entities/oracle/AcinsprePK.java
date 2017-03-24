@@ -3,10 +3,13 @@ package co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import lombok.Data;
+
 /**
  * The primary key class for the ACINSPRE database table.
  * 
  */
+@Data
 @Embeddable
 public class AcinsprePK implements Serializable {
 	//default serial version id, required for serializable classes.
@@ -28,63 +31,5 @@ public class AcinsprePK implements Serializable {
 	private long insAsiCod;
 
 	public AcinsprePK() {
-	}
-	public long getInsAno() {
-		return this.insAno;
-	}
-	public void setInsAno(long insAno) {
-		this.insAno = insAno;
-	}
-	public long getInsPer() {
-		return this.insPer;
-	}
-	public void setInsPer(long insPer) {
-		this.insPer = insPer;
-	}
-	public long getInsCraCod() {
-		return this.insCraCod;
-	}
-	public void setInsCraCod(long insCraCod) {
-		this.insCraCod = insCraCod;
-	}
-	public long getInsEstCod() {
-		return this.insEstCod;
-	}
-	public void setInsEstCod(long insEstCod) {
-		this.insEstCod = insEstCod;
-	}
-	public long getInsAsiCod() {
-		return this.insAsiCod;
-	}
-	public void setInsAsiCod(long insAsiCod) {
-		this.insAsiCod = insAsiCod;
-	}
-
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof AcinsprePK)) {
-			return false;
-		}
-		AcinsprePK castOther = (AcinsprePK)other;
-		return 
-			(this.insAno == castOther.insAno)
-			&& (this.insPer == castOther.insPer)
-			&& (this.insCraCod == castOther.insCraCod)
-			&& (this.insEstCod == castOther.insEstCod)
-			&& (this.insAsiCod == castOther.insAsiCod);
-	}
-
-	public int hashCode() {
-		final int prime = 31;
-		int hash = 17;
-		hash = hash * prime + ((int) (this.insAno ^ (this.insAno >>> 32)));
-		hash = hash * prime + ((int) (this.insPer ^ (this.insPer >>> 32)));
-		hash = hash * prime + ((int) (this.insCraCod ^ (this.insCraCod >>> 32)));
-		hash = hash * prime + ((int) (this.insEstCod ^ (this.insEstCod >>> 32)));
-		hash = hash * prime + ((int) (this.insAsiCod ^ (this.insAsiCod >>> 32)));
-		
-		return hash;
 	}
 }

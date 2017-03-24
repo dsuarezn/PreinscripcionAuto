@@ -3,11 +3,14 @@ package co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import lombok.Data;
+
 
 /**
  * The persistent class for the ACESTADO database table.
  * 
  */
+@Data
 @Entity
 @NamedQuery(name="Acestado.findAll", query="SELECT a FROM Acestado a")
 public class Acestado implements Serializable {
@@ -19,12 +22,5 @@ public class Acestado implements Serializable {
 	public Acestado() {
 	}
 
-	public AcestadoPK getId() {
-		return this.id;
-	}
-
-	public void setId(AcestadoPK id) {
-		this.id = id;
-	}
 
 }
