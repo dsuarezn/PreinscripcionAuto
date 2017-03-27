@@ -23,6 +23,14 @@ public class SgaClasificacionEstudiantePK implements Serializable {
 
 	public SgaClasificacionEstudiantePK() {
 	}
+
+	public long getCle_codEstudiante() {
+		return cle_codEstudiante;
+	}
+
+	public void setCle_codEstudiante(long cle_codEstudiante) {
+		this.cle_codEstudiante = cle_codEstudiante;
+	}
 	
 	
 	

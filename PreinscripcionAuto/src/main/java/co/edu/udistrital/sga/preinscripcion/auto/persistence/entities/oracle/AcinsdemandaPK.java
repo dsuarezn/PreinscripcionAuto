@@ -16,16 +16,16 @@ public class AcinsdemandaPK implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="INSDE_ANO")
-	private long insdeAno;
+	private Integer insdeAno;
 
 	@Column(name="INSDE_PER")
-	private long insdePer;
+	private Integer insdePer;
 
 	@Column(name="INSDE_EST_COD")
-	private long insdeEstCod;
+	private Long insdeEstCod;
 
 	@Column(name="INSDE_ASI_COD")
-	private long insdeAsiCod;
+	private Long insdeAsiCod;
 
 	public AcinsdemandaPK() {
 	}

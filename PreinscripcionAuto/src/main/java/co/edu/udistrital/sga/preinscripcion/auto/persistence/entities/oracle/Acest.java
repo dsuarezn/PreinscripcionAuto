@@ -84,7 +84,7 @@ public class Acest implements Serializable {
 	private BigDecimal estPbm;
 
 	@Column(name="EST_PEN_NRO")
-	private BigDecimal estPenNro;
+	private Integer estPenNro;
 
 	@Column(name="EST_PORCENTAJE")
 	private BigDecimal estPorcentaje;

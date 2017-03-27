@@ -25,10 +25,10 @@ public class Acinsdemanda implements Serializable {
 	private BigDecimal insdeCeaCod;
 
 	@Column(name="INSDE_CRA_COD")
-	private BigDecimal insdeCraCod;
+	private Long insdeCraCod;
 
 	@Column(name="INSDE_CRED")
-	private BigDecimal insdeCred;
+	private Integer insdeCred;
 
 	@Column(name="INSDE_EQUIVALENTE")
 	private BigDecimal insdeEquivalente;

@@ -17,7 +17,7 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
 
 @PlanningSolution
 @XStreamAlias("PreinscripcionAsignaturas")
-public class PreinscripcionAsignaturas extends AbstractPersistable implements Solution<HardSoftScore> {
+public class PreinscripcionAsignaturasSolution extends AbstractPersistable implements Solution<HardSoftScore> {
 
 	
 	/***

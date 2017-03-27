@@ -26,10 +26,11 @@ public class SgaClasificacionEstudiante implements Serializable {
 
 	private String cle_tipoEstudiante;
 
-	private int prueba;
-
 	public SgaClasificacionEstudiante() {
 	}
+
+	
+	
 
 
 }
