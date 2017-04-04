@@ -1,11 +1,14 @@
 package co.edu.udistrital.sga.preinscripcion.auto.domain;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * @author Alexander
  * @version 1.0
  * @created 07-feb.-2017 15:56:31
  * fact emuneration
  */
+@XStreamAlias("DiasSemana")
 public enum DiasSemana {
 
 	 D_LUNES ("Lunes", 1), 

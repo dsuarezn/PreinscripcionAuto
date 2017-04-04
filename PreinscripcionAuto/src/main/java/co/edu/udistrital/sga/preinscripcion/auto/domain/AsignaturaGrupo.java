@@ -6,6 +6,8 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 
 /**
  * @author Alexander
@@ -13,7 +15,8 @@ import java.util.List;
  * @created 07-feb.-2017 15:56:30
  * fact asignaturas por grupos generadas
  */
-@Data //Se comenta el data debido a que no funcionan los gets al devolverlos por restcontroller
+@Data 
+@XStreamAlias("AsignaturaGrupo")
 public class AsignaturaGrupo extends AbstractPersistable {
 	
 	private Long idAsignaturaGrupo;

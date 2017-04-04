@@ -1,5 +1,7 @@
 package co.edu.udistrital.sga.preinscripcion.auto.domain;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
 import lombok.Data;
 
@@ -10,6 +12,7 @@ import lombok.Data;
  * fact ubicacion
  */
 @Data
+@XStreamAlias("Ubicacion")
 public class Ubicacion extends AbstractPersistable {
 
 	private Long idUbicacion;

@@ -2,6 +2,8 @@ package co.edu.udistrital.sga.preinscripcion.auto.domain;
 
 import java.util.List;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
 import lombok.Data;
 
@@ -12,6 +14,7 @@ import lombok.Data;
  * facts de grupos generados con materias
  */
 @Data
+@XStreamAlias("Grupo")
 public class Grupo extends AbstractPersistable {
 
 	private Integer anio;

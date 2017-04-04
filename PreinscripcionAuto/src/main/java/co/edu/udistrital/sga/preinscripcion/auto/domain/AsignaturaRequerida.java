@@ -1,6 +1,8 @@
 package co.edu.udistrital.sga.preinscripcion.auto.domain;
 
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
 import lombok.Data;
 import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
@@ -12,6 +14,7 @@ import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistab
  * fact de listado de asignaturas
  */
 @Data
+@XStreamAlias("AsignaturaRequerida")
 public class AsignaturaRequerida extends AbstractPersistable {
 
 	private Asignatura asignatura;

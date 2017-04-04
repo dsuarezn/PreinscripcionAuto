@@ -10,14 +10,26 @@ import org.optaplanner.core.api.domain.solution.Solution;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.impl.score.buildin.hardsoft.HardSoftScoreDefinition;
 import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
+import co.edu.udistrital.sga.preinscripcion.auto.services.CursosService;
+import co.edu.udistrital.sga.preinscripcion.auto.services.EstudiantesService;
+import co.edu.udistrital.sga.preinscripcion.auto.services.ProyectoService;
+
 import org.optaplanner.persistence.xstream.impl.score.XStreamScoreConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 
 @PlanningSolution
-@XStreamAlias("PreinscripcionAsignaturas")
+@XStreamAlias("PreinscripcionAsignaturasSolution")
 public class PreinscripcionAsignaturasSolution extends AbstractPersistable implements Solution<HardSoftScore> {
+
+	@Autowired
+    private ProyectoService proyectoService;
+	@Autowired
+    private CursosService cursosService;
+	@Autowired
+    private EstudiantesService estudiantesService;
 
 	
 	/***
