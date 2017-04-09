@@ -20,13 +20,22 @@ public enum DiasSemana {
 	 
 		   
     private final String nombreDia; 
-    private final Integer horaEntera; 
+    private final Integer diaEntero; 
     
-    DiasSemana (String nombreDia, Integer horaInt) { 
+    DiasSemana (String nombreDia, Integer diaInt) { 
         this.nombreDia = nombreDia;
-        this.horaEntera = horaInt;
+        this.diaEntero = diaInt;
     } 
  
+    public static DiasSemana obtenerDesdeEnterio(Integer valor){
+      	 for(DiasSemana e: DiasSemana.values()) 
+      	 {
+   		    if(e.diaEntero == valor) {
+   		      return e;
+   		    }
+   		 }
+      	 return null;
+      }
 	    
 	
 }

@@ -3,7 +3,12 @@ package co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Asignatura;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Horario;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Ubicacion;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,7 +42,7 @@ public class Accurso implements Serializable {
 	private Integer curCapMax;
 
 	@Column(name="CUR_CRA_COD")
-	private Integer curCraCod;
+	private Long curCraCod;
 
 	@Column(name="CUR_DEP_COD")
 	private Long curDepCod;
@@ -88,10 +93,13 @@ public class Accurso implements Serializable {
 	private BigDecimal curTipo;
 
 	//bi-directional many-to-one association to Achorario
-	@OneToMany(mappedBy="accurso")
+	@OneToMany
+	@JoinColumn(name="HOR_ID_CURSO",referencedColumnName="CUR_ID")
 	private List<Achorario> achorarios;
 
 	public Accurso() {
 	}
 
+	
+	
 }

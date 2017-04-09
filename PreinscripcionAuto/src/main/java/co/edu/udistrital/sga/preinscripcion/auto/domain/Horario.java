@@ -21,7 +21,7 @@ public class Horario extends AbstractPersistable {
 	private DiasSemana diaSemana;
 	public List<IntervaloDeTiempo> m_Franjas;
 
-	public Horario(DiasSemana dia, IntervaloDeTiempo ... deTiempos ){
+	public Horario(DiasSemana dia, List<IntervaloDeTiempo> deTiempos ){
 		this.diaSemana=dia;
 		this.m_Franjas=new ArrayList<IntervaloDeTiempo>();
 		for (IntervaloDeTiempo intervaloDeTiempo : deTiempos) {
@@ -29,5 +29,7 @@ public class Horario extends AbstractPersistable {
 		}
 	}
 
+	
+	
 
 }

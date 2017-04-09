@@ -17,21 +17,23 @@ import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistab
 @XStreamAlias("AsignaturaRequerida")
 public class AsignaturaRequerida extends AbstractPersistable {
 
-	private Asignatura asignatura;
+	//private Asignatura asignatura;
 	private String estado;	
 	private Integer periodo;
 	private Integer anio;
 	private Long codigoEstudiante;
+	private Long codigoAsignatura;
 	
 
 	public AsignaturaRequerida(Integer creditos, Long codigoAsignatura, String estado, Integer periodo, Integer anio,
 			Long codigoEstudiante) {
 		super();		
-		this.asignatura = new Asignatura(creditos,codigoAsignatura);	
+		//this.asignatura = new Asignatura(creditos,codigoAsignatura);	
 		this.estado = estado;
 		this.periodo = periodo;
 		this.anio = anio;
 		this.codigoEstudiante = codigoEstudiante;
+		this.codigoAsignatura=this.getCodigoAsignatura();
 	}
 
 	

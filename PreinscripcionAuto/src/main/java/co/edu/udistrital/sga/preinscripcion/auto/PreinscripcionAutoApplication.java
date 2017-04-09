@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
+@EnableCaching
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class,DataSourceTransactionManagerAutoConfiguration.class})
 //@EntityScan(basePackages="co.edu.udistrital.sga.preinscripcion.auto.persistence.entities")
 public class PreinscripcionAutoApplication {

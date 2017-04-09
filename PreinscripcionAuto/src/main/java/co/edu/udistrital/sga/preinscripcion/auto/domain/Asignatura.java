@@ -30,29 +30,6 @@ public class Asignatura extends AbstractPersistable {
 		this.codigoAsignatura = codigoAsignatura;		
 	}
 
-	public Integer getCreditos() {
-		return creditos;
-	}
-
-	public void setCreditos(Integer creditos) {
-		this.creditos = creditos;
-	}
-
-	public Long getCodigoAsignatura() {
-		return codigoAsignatura;
-	}
-
-	public void setCodigoAsignatura(Long codigoAsignatura) {
-		this.codigoAsignatura = codigoAsignatura;
-	}
-
-	public String getNombreAsignatura() {
-		return nombreAsignatura;
-	}
-
-	public void setNombreAsignatura(String nombreAsignatura) {
-		this.nombreAsignatura = nombreAsignatura;
-	}
 
 	
 	

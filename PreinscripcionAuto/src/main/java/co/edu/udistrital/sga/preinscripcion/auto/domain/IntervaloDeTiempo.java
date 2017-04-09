@@ -35,6 +35,16 @@ public enum IntervaloDeTiempo {
         this.horaf24 = hora24f;
         this.horaEntera = horaInt;
     } 
+    
+    public static IntervaloDeTiempo obtenerDesdeEntero(Integer valor){
+    	 for(IntervaloDeTiempo e: IntervaloDeTiempo.values()) 
+    	 {
+		    if(e.horaEntera == valor) {
+		      return e;
+		    }
+		 }
+    	 return null;
+    }
  
 	    
 	

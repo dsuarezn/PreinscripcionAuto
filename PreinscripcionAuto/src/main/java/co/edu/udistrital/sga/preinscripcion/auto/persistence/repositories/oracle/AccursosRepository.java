@@ -16,7 +16,11 @@ import co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle.Acc
 @Repository
 public interface AccursosRepository extends JpaRepository<Accurso, Long> {
 	
-	@Query("select NEW co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaGrupo(cu.curId,cu.curAsiCod,cu.curNroCupo,cu.curNroIns, cu.curCapMax, cu.curDepCod,cu.curGrupo) from Accurso cu where cu.curApeAno=:anio and cu.curApePer=:periodo and cu.curCraCod=:codCarrera")
-	public List<AsignaturaGrupo> obtenerAsignaturasProgramadas(@Param("anio")Integer anio,@Param("periodo")Integer periodo,@Param("codCarrera") Integer codCarrera);
+//	@Query("select NEW co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaGrupo(cu.curId,cu.curAsiCod,cu.curNroCupo,cu.curNroIns, cu.curCapMax, cu.curDepCod,cu.curGrupo) from Accurso cu where cu.curApeAno=:anio and cu.curApePer=:periodo and cu.curCraCod=:codCarrera")
+//	public List<AsignaturaGrupo> obtenerAsignaturasProgramadas(@Param("anio")Integer anio,@Param("periodo")Integer periodo,@Param("codCarrera") Integer codCarrera);
+	
+
+	@Query("select NEW co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaGrupo(cu) from Accurso cu where cu.curApeAno=:anio and cu.curApePer=:periodo and cu.curCraCod=:codCarrera and cu.curEstado like %:estado%")
+	public List<AsignaturaGrupo> obtenerAsignaturasProgramadas(@Param("anio")Integer anio,@Param("periodo")Integer periodo,@Param("codCarrera") Long codCarrera,@Param("estado") String estado);
 	
 }

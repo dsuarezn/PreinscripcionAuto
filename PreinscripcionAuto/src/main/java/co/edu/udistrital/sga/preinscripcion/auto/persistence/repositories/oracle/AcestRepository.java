@@ -15,4 +15,6 @@ import co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle.Ace
 @Repository
 public interface AcestRepository extends JpaRepository<Acest, Long> {
 	
+	public List<Acest> findByEstEstadoEstContaining(String estEstadoEst);
+	
 }

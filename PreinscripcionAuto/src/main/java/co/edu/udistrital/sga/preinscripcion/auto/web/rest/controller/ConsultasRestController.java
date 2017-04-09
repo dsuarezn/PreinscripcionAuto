@@ -12,7 +12,7 @@ import co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaGrupo;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaRequerida;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.Estudiante;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.ProyectoCurricular;
-import co.edu.udistrital.sga.preinscripcion.auto.domain.solver.PreinscripcionAutomaticaSolverManager;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.solver.PreinscripcionAutomaticaSolverManagerImpl;
 import co.edu.udistrital.sga.preinscripcion.auto.services.CursosService;
 import co.edu.udistrital.sga.preinscripcion.auto.services.EstudiantesService;
 import co.edu.udistrital.sga.preinscripcion.auto.services.ProyectoService;
@@ -36,7 +36,7 @@ public class ConsultasRestController {
 	
 	@RequestMapping(value = "/asignaturas", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody List<AsignaturaGrupo> consultarCursos() {     	    	
-		return cursosService.obtenerCursosProgramados(2017, 1, 25);
+		return cursosService.obtenerCursosProgramados(2017, 1, 25L);
     }
 
 	@RequestMapping(value = "/estudiantes", method = RequestMethod.GET, produces = "application/json")
@@ -53,7 +53,6 @@ public class ConsultasRestController {
     public @ResponseBody List<AsignaturaRequerida> consultarAsignaturasInsPre() {     	    	
 		return cursosService.obtenerListaMateriasPreinsPre(2017, 1, 25L,"%A%");
     }
-	
 	
 	
 }

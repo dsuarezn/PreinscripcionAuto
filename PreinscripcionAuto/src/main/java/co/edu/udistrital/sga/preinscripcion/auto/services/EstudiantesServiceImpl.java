@@ -27,7 +27,7 @@ public class EstudiantesServiceImpl implements EstudiantesService {
 	public List<Estudiante> obtenerListaEstudiantes() {
 		
 		List<SgaClasificacionEstudiante> clasificacionList= sgaClasificacionEstudianteRepository.findAll();
-		List<Acest> estudianteList=acestRepository.findAll();
+		List<Acest> estudianteList=acestRepository.findByEstEstadoEstContaining("A");
 		List<Estudiante> listaDominio=new ArrayList<>();
 		
 		for (Acest estudiante : estudianteList) {

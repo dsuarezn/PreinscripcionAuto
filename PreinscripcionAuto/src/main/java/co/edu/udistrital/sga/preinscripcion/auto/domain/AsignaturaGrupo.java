@@ -1,12 +1,19 @@
 package co.edu.udistrital.sga.preinscripcion.auto.domain;
 
 
-import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
-import lombok.Data;
-
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
+import co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle.Accurso;
+import co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle.Achorario;
+import lombok.Getter;
+import lombok.Setter;
 
 
 /**
@@ -15,123 +22,77 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @created 07-feb.-2017 15:56:30
  * fact asignaturas por grupos generadas
  */
-@Data 
+@Getter
+@Setter
 @XStreamAlias("AsignaturaGrupo")
 public class AsignaturaGrupo extends AbstractPersistable {
 	
 	private Long idAsignaturaGrupo;
-	private Asignatura asignatura;
+//	private Asignatura asignatura;
 	private Long codigoAsignatura;
 	private Integer cupos;	
 	private Integer inscritos;
 	private Integer capacidadMaxima;
-	private List<Horario> horario;
+	private List<Horario> horarios;
 	private Ubicacion ubicacion;
 	private Long codigoUbicacion;
 	private Long codigoGrupo;
+	 
 	
 
 	public AsignaturaGrupo(){
 
 	}
 
-	public AsignaturaGrupo(Long idAsignaturaGrupo, Long codigoAsignatura, Integer cupos, Integer inscritos,
-			Integer capacidadMaxima, Long codigoUbicacion, Long codigoGrupo) {
-		super();
-		this.idAsignaturaGrupo = idAsignaturaGrupo;
-		this.codigoAsignatura = codigoAsignatura;
-		this.cupos = cupos;
-		this.inscritos = inscritos;
-		this.capacidadMaxima = capacidadMaxima;
+//	@SuppressWarnings({ "unchecked", "rawtypes" })
+//	public AsignaturaGrupo(Long idAsignaturaGrupo, Long codigoAsignatura, Integer cupos, Integer inscritos,
+//			Integer capacidadMaxima, Long codigoUbicacion, Long codigoGrupo) {
+//		super();
+//		this.idAsignaturaGrupo = idAsignaturaGrupo;
+//		this.codigoAsignatura = codigoAsignatura;
+//		this.cupos = cupos;
+//		this.inscritos = inscritos;
+//		this.capacidadMaxima = capacidadMaxima;
+//	
+//		this.codigoUbicacion = codigoUbicacion;
+//		this.codigoGrupo = codigoGrupo;
+////		this.achorarios=curso.getAchorarios();
+//	}
+
 	
-		this.codigoUbicacion = codigoUbicacion;
-		this.codigoGrupo = codigoGrupo;
+	public AsignaturaGrupo(Accurso curso) {
+		super();
+		this.idAsignaturaGrupo = curso.getCurId();
+		this.codigoAsignatura = curso.getCurAsiCod();
+		this.cupos = curso.getCurNroCupo();
+		this.inscritos = curso.getCurNroIns();
+		this.capacidadMaxima = curso.getCurCapMax();
+	
+		this.codigoUbicacion = curso.getCurDepCod();
+		this.codigoGrupo = curso.getCurGrupo();
+		this.horarios=obtenerHorarioAchorarios(curso.getAchorarios());
 		
 	}
-
-	public Long getIdAsignaturaGrupo() {
-		return idAsignaturaGrupo;
+	
+	public List<Horario> obtenerHorarioAchorarios(List<Achorario> achorarios){
+		List<Horario> horarios=new ArrayList<Horario>();		
+		Map<Integer,List<Achorario>> horariosAgrupados=achorarios.stream().collect(Collectors.groupingBy(Achorario::getHorDiaNro));		
+		for (Map.Entry<Integer,List<Achorario>> entry : horariosAgrupados.entrySet())
+		{
+			Horario horario=new Horario(DiasSemana.obtenerDesdeEnterio(entry.getKey()), obtenerIntervaloDeTiempo(entry.getValue()));
+			horarios.add(horario);
+		}
+		return horarios;
 	}
-
-	public void setIdAsignaturaGrupo(Long idAsignaturaGrupo) {
-		this.idAsignaturaGrupo = idAsignaturaGrupo;
-	}
-
-	public Asignatura getAsignatura() {
-		return asignatura;
-	}
-
-	public void setAsignatura(Asignatura asignatura) {
-		this.asignatura = asignatura;
-	}
-
-	public Long getCodigoAsignatura() {
-		return codigoAsignatura;
-	}
-
-	public void setCodigoAsignatura(Long codigoAsignatura) {
-		this.codigoAsignatura = codigoAsignatura;
-	}
-
-	public Integer getCupos() {
-		return cupos;
-	}
-
-	public void setCupos(Integer cupos) {
-		this.cupos = cupos;
-	}
-
-	public Integer getInscritos() {
-		return inscritos;
-	}
-
-	public void setInscritos(Integer inscritos) {
-		this.inscritos = inscritos;
-	}
-
-	public Integer getCapacidadMaxima() {
-		return capacidadMaxima;
-	}
-
-	public void setCapacidadMaxima(Integer capacidadMaxima) {
-		this.capacidadMaxima = capacidadMaxima;
-	}
-
-	public List<Horario> getHorario() {
-		return horario;
-	}
-
-	public void setHorario(List<Horario> horario) {
-		this.horario = horario;
-	}
-
-	public Ubicacion getUbicacion() {
-		return ubicacion;
-	}
-
-	public void setUbicacion(Ubicacion ubicacion) {
-		this.ubicacion = ubicacion;
-	}
-
-	public Long getCodigoUbicacion() {
-		return codigoUbicacion;
-	}
-
-	public void setCodigoUbicacion(Long codigoUbicacion) {
-		this.codigoUbicacion = codigoUbicacion;
-	}
-
-	public Long getCodigoGrupo() {
-		return codigoGrupo;
-	}
-
-	public void setCodigoGrupo(Long codigoGrupo) {
-		this.codigoGrupo = codigoGrupo;
-	}
-
 	
 	
-
+	public List<IntervaloDeTiempo> obtenerIntervaloDeTiempo(List<Achorario> lista){
+		List<IntervaloDeTiempo> listaIntervalos=new ArrayList<>();		
+		for (Achorario achorario : lista) {			
+			listaIntervalos.add(IntervaloDeTiempo.obtenerDesdeEntero(achorario.getHorHora()));
+		}
+		return listaIntervalos;
+	}
 	
 	
 

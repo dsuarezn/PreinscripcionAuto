@@ -29,23 +29,6 @@ public class ProyectoCurricular extends AbstractPersistable {
 
 	}
 
-	public Long getCodigoProyecto() {
-		return codigoProyecto;
-	}
-
-	public void setCodigoProyecto(Long codigoProyecto) {
-		this.codigoProyecto = codigoProyecto;
-	}
-
-	public String getNombreProyecto() {
-		return nombreProyecto;
-	}
-
-	public void setNombreProyecto(String nombreProyecto) {
-		this.nombreProyecto = nombreProyecto;
-	}
-
-	
 
 
 }

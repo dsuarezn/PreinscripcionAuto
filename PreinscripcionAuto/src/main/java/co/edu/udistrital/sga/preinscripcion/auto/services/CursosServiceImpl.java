@@ -27,8 +27,8 @@ public class CursosServiceImpl implements CursosService {
 	private AcinspreRepository acinspreRepository;
 	
 	@Override
-	public List<AsignaturaGrupo> obtenerCursosProgramados(Integer anio, Integer periodo, Integer codigoCarrera) {
-		return accursosRepository.obtenerAsignaturasProgramadas(anio, periodo, codigoCarrera);
+	public List<AsignaturaGrupo> obtenerCursosProgramados(Integer anio, Integer periodo, Long codigoCarrera) {
+		return accursosRepository.obtenerAsignaturasProgramadas(anio, periodo, codigoCarrera, "A");
 	}
 
 	@Override
