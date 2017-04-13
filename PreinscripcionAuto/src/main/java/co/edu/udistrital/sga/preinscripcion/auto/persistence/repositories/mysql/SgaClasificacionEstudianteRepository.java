@@ -1,6 +1,8 @@
 package co.edu.udistrital.sga.preinscripcion.auto.persistence.repositories.mysql;
 
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +12,6 @@ import co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.mysql.SgaC
 @Repository
 public interface SgaClasificacionEstudianteRepository extends JpaRepository<SgaClasificacionEstudiante, SgaClasificacionEstudiantePK> {
 	 
+	List<SgaClasificacionEstudiante> findAllByOrderByCleClasificacion();
+	
 }

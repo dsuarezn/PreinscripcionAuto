@@ -1,0 +1,79 @@
+
+
+package org.edu.udistrital.sga.preinscripcion.auto.solver;
+    dialect "java"
+
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Asignatura;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaGrupo;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaPlaneada;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaRequerida;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.DiasSemana;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Estudiante;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.EstudianteXCurso;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Grupo;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Horario;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.IntervaloDeTiempo;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Pensum;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.PlanDeEstudios;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.PreinscripcionAsignaturasSolution;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.ProyectoCurricular;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Ubicacion;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.solver.ConflictoCursos;
+import java.util.ArrayList;
+import java.util.List;
+
+global HardSoftScoreHolder scoreHolder;
+global java.lang.Integer creditosMaximos;
+
+
+	
+
+// ############################################################################
+// Hard constraints
+// ############################################################################
+
+rule "setearVariablesGlobales"
+salience 1000
+    when
+       	eval(creditosMaximos == null)
+    then
+        drools.getWorkingMemory().setGlobal("creditosMaximos", Integer.valueOf(18) );
+end
+
+rule "asignaturasSoloProgramanUnavez"
+    when       
+       $leftCurso : EstudianteXCurso($leftCourse : getCurso(), $estudiante : getEstudiante())
+       $rightCurso : EstudianteXCurso(curso.codigoAsignatura == $leftCourse.codigoAsignatura, curso.idAsignaturaGrupo != $leftCourse.idAsignaturaGrupo,  estudiante == $estudiante )
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, - 5);
+end
+
+rule "noPermitirCursosMismoHorario"
+    when
+       $courseConflict : ConflictoCursos($leftCourse : getLeftCourse(), $rightCourse : getRightCourse())
+       $leftEstudianteCurso : EstudianteXCurso(curso == $leftCourse,  curso != $rightCourse, $estudiante : getEstudiante())
+       $rightEstudianteCurso : EstudianteXCurso(curso == $rightCourse, curso == $leftCourse,  estudiante == $estudiante )
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, - $courseConflict.getConflictCount());
+end
+
+rule "cursosNoSobreOcupados" 
+    when
+       $estudianteCurso : EstudianteXCurso($cursoReferencia : getCurso())
+       $estudiantesProgramadosCount : Long() from accumulate($cursoReferenciado : EstudianteXCurso(curso == $cursoReferencia, estudiante != null), count($cursoReferenciado))
+       $estudianteCursoOk : EstudianteXCurso(curso == $cursoReferencia, curso.cupos < $estudiantesProgramadosCount.intValue())
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, - $estudiantesProgramadosCount.intValue());
+end
+
+rule "estudianteNoPuedeExcederCreditos" 
+    when
+       $estudianteRef : Estudiante()
+       $sumaCreditosEstudiante : Number() from accumulate(EstudianteXCurso(estudiante == $estudianteRef,curso != null, $cursoRef : getCurso()), sum($cursoRef.getCreditos()))
+       eval(creditosMaximos < $sumaCreditosEstudiante.intValue())
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, - $sumaCreditosEstudiante.intValue());
+end
+
+

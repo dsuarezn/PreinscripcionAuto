@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -37,7 +39,8 @@ public class AsignaturaGrupo extends AbstractPersistable {
 	private Ubicacion ubicacion;
 	private Long codigoUbicacion;
 	private Long codigoGrupo;
-	 
+	private Integer creditos;
+	private Integer ranking;
 	
 
 	public AsignaturaGrupo(){
@@ -71,6 +74,7 @@ public class AsignaturaGrupo extends AbstractPersistable {
 		this.codigoUbicacion = curso.getCurDepCod();
 		this.codigoGrupo = curso.getCurGrupo();
 		this.horarios=obtenerHorarioAchorarios(curso.getAchorarios());
+		this.ranking=0;
 		
 	}
 	
@@ -93,7 +97,30 @@ public class AsignaturaGrupo extends AbstractPersistable {
 		}
 		return listaIntervalos;
 	}
+
 	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AsignaturaGrupo other = (AsignaturaGrupo) obj;
+		if (idAsignaturaGrupo == null) {
+			if (other.idAsignaturaGrupo != null)
+				return false;
+		} else if (!idAsignaturaGrupo.equals(other.idAsignaturaGrupo))
+			return false;
+		return true;
+	}
+	
+	
+	public void setCreditosOptional(Optional<Integer> value){
+		this.creditos=value.get();
+	}
 	
 
 }

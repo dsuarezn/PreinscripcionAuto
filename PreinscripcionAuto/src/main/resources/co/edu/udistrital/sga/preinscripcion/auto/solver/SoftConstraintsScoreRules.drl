@@ -1,0 +1,80 @@
+
+
+
+package org.edu.udistrital.sga.preinscripcion.auto.solver;
+    dialect "java"
+
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Asignatura;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaGrupo;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaPlaneada;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaRequerida;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.DiasSemana;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Estudiante;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.EstudianteXCurso;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Grupo;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Horario;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.IntervaloDeTiempo;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Pensum;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.PlanDeEstudios;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.PreinscripcionAsignaturasSolution;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.ProyectoCurricular;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.Ubicacion;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.solver.ConflictoCursos;
+import java.util.ArrayList;
+import java.util.List;
+import java.lang.Double;
+
+
+global HardSoftScoreHolder scoreHolder;
+global java.lang.Integer creditosMaximos;
+
+	function Double valorarCompletitudAsignaturas(List listaMateriasInscritas, List listaPreinsPorDemanda){
+		if(listaMateriasInscritas.size()<1){return 0D;}
+		if(listaPreinsPorDemanda.size()<1){return 0D;}
+		Long valor = 0L;
+		for (Object asignaturacod : listaPreinsPorDemanda) {
+			Integer codigoAsig=(Integer)asignaturacod;
+			if(listaMateriasInscritas.contains(codigoAsig)){
+				valor=valor+1;
+			}
+		}
+		return  (valor.doubleValue()/(listaPreinsPorDemanda.size()));		
+	}
+
+
+	function Double calcularScoreCompletitudAsignaturas(Integer clasificacion, Double porcentajeCompletitud){
+		if(clasificacion<1){
+			return 0.1 * porcentajeCompletitud;
+		}		
+		return (10/clasificacion.doubleValue())*(porcentajeCompletitud*10);
+	}
+
+
+
+	// ############################################################################
+	// soft constraints
+	// ############################################################################
+	
+	rule "peorPuntajeMateriasMenosCompactas" 
+	    when
+	       $estudianteRef : Estudiante()
+	       $sumaCreditosEstudiante : Integer() from accumulate(EstudianteXCurso(estudiante == $estudianteRef,curso != null, $cursoRef : getCurso()), calcularHorariosNegativeScore($cursoRef.getHorarios()))
+	    then
+	       scoreHolder.addSoftConstraintMatch(kcontext, - $sumaCreditosEstudiante);
+	end
+	
+	rule "mejorPuntajeEstudiantesRankingAlto" 
+	    when
+	       $estudianteRef : Estudiante($listaCodigosDemanda : getListaCodigosPorDemanda())
+	       $listaCodigos : ArrayList() from accumulate(EstudianteXCurso(estudiante == $estudianteRef,curso != null, $cursoRef : getCurso()), acumularListaCodAsignatura($cursoRef.getCodigoAsignatura()))    	       
+	    then
+	       scoreHolder.addSoftConstraintMatch(kcontext,calcularScoreCompletitudAsignaturas($estudianteRef.getClasificacion(),valorarCompletitudAsignaturas($listaCodigos, $listaCodigosDemanda)).intValue());
+	end
+	
+	rule "mejorAsignaturasProgramadasRanking" 
+	    when
+	       $estudiantexCurso : EstudianteXCurso($cursoleft : curso, $estudiante : estudiante, estudiante != null, curso !=null)       
+	    then
+	       scoreHolder.addSoftConstraintMatch(kcontext, ($cursoleft.getRanking()/100));
+	end

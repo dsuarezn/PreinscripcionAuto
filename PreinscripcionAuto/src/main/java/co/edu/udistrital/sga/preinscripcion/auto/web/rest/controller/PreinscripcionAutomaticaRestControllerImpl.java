@@ -23,6 +23,7 @@ import co.edu.udistrital.sga.preinscripcion.auto.web.rest.domain.JsonMessage;
 import co.edu.udistrital.sga.preinscripcion.auto.web.rest.domain.JsonPreinscripcionAutomaticaSolution;
 
 
+@RestController
 @RequestMapping("/rest")
 public class PreinscripcionAutomaticaRestControllerImpl {
 
@@ -37,10 +38,10 @@ public class PreinscripcionAutomaticaRestControllerImpl {
 	}
 	
 	protected JsonPreinscripcionAutomaticaSolution convertToJsonPreinscripcionAutomaticaSolution(PreinscripcionAsignaturasSolution solution){
-		return new JsonPreinscripcionAutomaticaSolution();
+		return new JsonPreinscripcionAutomaticaSolution(solution.getListaProgramaciónEstudiantes());
 	}
 
-	@RequestMapping(value = "/solution/solve", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/solution/solve", method = RequestMethod.GET, produces = "application/json")
 	public JsonMessage solve(HttpServletRequest request) {
 		boolean success = preinscripcionAutomaticaSolverManagerImpl.solve(request.getSession().getId(), 2017, 1, 25L);
         return new JsonMessage(success ? "Solving started." : "Solver was already running.");

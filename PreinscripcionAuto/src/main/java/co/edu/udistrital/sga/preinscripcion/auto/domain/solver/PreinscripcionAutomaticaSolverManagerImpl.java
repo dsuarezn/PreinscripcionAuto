@@ -12,21 +12,34 @@ import javax.annotation.PreDestroy;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import co.edu.udistrital.sga.preinscripcion.auto.domain.PreinscripcionAsignaturasSolution;
+import co.edu.udistrital.sga.preinscripcion.auto.services.CursosService;
+import co.edu.udistrital.sga.preinscripcion.auto.services.EstudiantesService;
+import co.edu.udistrital.sga.preinscripcion.auto.services.ProyectoService;
 import lombok.extern.java.Log;
 
-//@Component
+@Component
 @Log
 @Qualifier("preinscripcionAutomaticaSolverManager")
 public class PreinscripcionAutomaticaSolverManagerImpl implements Serializable, PreinscripcionAutomaticaSolverManager{
 
 	
+	@Autowired
+    private ProyectoService proyectoService;
+	@Autowired
+    private CursosService cursosService;
+	@Autowired
+    private EstudiantesService estudiantesService;
+
+	
 	private static final long serialVersionUID = 3663335141070683532L;
 
 
-	private static final String SOLVER_CONFIG = "co/edu/udistrital/sga/preinscripcion/auto/solver/PreinscripcionAutomaticaScoreRules.xml";
+	private static final String SOLVER_CONFIG = "co/edu/udistrital/sga/preinscripcion/auto/solver/PreinscripcionAutomaticaSolverConfig.xml";
 	
 	private SolverFactory<PreinscripcionAsignaturasSolution> solverFactory;
 	private Map<String, PreinscripcionAsignaturasSolution> sessionSolutionMap;
@@ -60,7 +73,7 @@ public class PreinscripcionAutomaticaSolverManagerImpl implements Serializable, 
 	public synchronized PreinscripcionAsignaturasSolution retrieveOrCreateSolution(String sessionid, Integer anio, Integer periodo, Long codCarrera){
 		PreinscripcionAsignaturasSolution solution = sessionSolutionMap.get(sessionid);
         if (solution == null) {
-        	solution=new PreinscripcionAsignaturasSolution();
+        	solution=new PreinscripcionAsignaturasSolution(proyectoService, cursosService, estudiantesService);        	
         	solution.initFacts(anio, periodo, codCarrera);
             sessionSolutionMap.put(sessionid, solution);
         }

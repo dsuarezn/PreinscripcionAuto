@@ -8,6 +8,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @created 07-feb.-2017 15:56:31
  * fact emuneration
  */
+
 @XStreamAlias("IntervaloDeTiempo")
 public enum IntervaloDeTiempo {
 
@@ -46,6 +47,13 @@ public enum IntervaloDeTiempo {
     	 return null;
     }
  
+    public Integer getHora24Entera(){
+    	return this.horaEntera;
+    }
+    
+    public Integer getHora24String(){
+    	return this.horaEntera;
+    }
 	    
 	
 }

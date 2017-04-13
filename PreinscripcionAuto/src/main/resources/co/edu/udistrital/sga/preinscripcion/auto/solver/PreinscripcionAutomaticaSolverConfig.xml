@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <solver>
-	<solutionClass>org.btrg.optaplannerhellotest.domain.HelloSolution</solutionClass>
-	<entityClass>org.btrg.optaplannerhellotest.domain.HelloEntity</entityClass>
+	<solutionClass>co.edu.udistrital.sga.preinscripcion.auto.domain.PreinscripcionAsignaturasSolution</solutionClass>
+	<entityClass>co.edu.udistrital.sga.preinscripcion.auto.domain.EstudianteXCurso</entityClass>
 	<scoreDirectorFactory>
 		<scoreDefinitionType>HARD_SOFT</scoreDefinitionType>
-		<scoreDrl>co/edu/udistrital/sga/preinscripcion/auto/solver/PreinscripcionAutomaticaScoreRules.drl</scoreDrl>
+		<scoreDrl>co/edu/udistrital/sga/preinscripcion/auto/solver/HardConstraintsScoreRules.drl</scoreDrl>
+		<scoreDrl>co/edu/udistrital/sga/preinscripcion/auto/solver/SoftConstraintsScoreRules.drl</scoreDrl>
 	</scoreDirectorFactory>
 	<localSearch>
 		<termination>

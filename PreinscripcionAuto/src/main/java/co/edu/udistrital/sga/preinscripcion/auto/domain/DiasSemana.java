@@ -36,6 +36,11 @@ public enum DiasSemana {
    		 }
       	 return null;
       }
-	    
+    public String getNombreDia(){
+    	return nombreDia;
+    }
+    public Integer getDiaEntero(){
+    	return diaEntero;
+    }    
 	
 }

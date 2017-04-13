@@ -23,6 +23,7 @@ public class AsignaturaRequerida extends AbstractPersistable {
 	private Integer anio;
 	private Long codigoEstudiante;
 	private Long codigoAsignatura;
+	private Integer creditos;
 	
 
 	public AsignaturaRequerida(Integer creditos, Long codigoAsignatura, String estado, Integer periodo, Integer anio,
@@ -33,7 +34,8 @@ public class AsignaturaRequerida extends AbstractPersistable {
 		this.periodo = periodo;
 		this.anio = anio;
 		this.codigoEstudiante = codigoEstudiante;
-		this.codigoAsignatura=this.getCodigoAsignatura();
+		this.codigoAsignatura=codigoAsignatura;
+		this.creditos=creditos;		
 	}
 
 	

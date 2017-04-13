@@ -15,7 +15,7 @@ import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistab
 public class EstudianteXCurso extends AbstractPersistable {
 
 	private Estudiante estudiante;
-	private AsignaturaGrupo asignatura;
+	private AsignaturaGrupo curso;
 	
 	@PlanningVariable(valueRangeProviderRefs = {"rangoEstudiantes"})
 	public Estudiante getEstudiante() {
@@ -31,11 +31,11 @@ public class EstudianteXCurso extends AbstractPersistable {
 	}
 	
 	@PlanningVariable(valueRangeProviderRefs = {"rangoAsignaturas"})
-	public AsignaturaGrupo getAsignatura() {
-		return asignatura;
+	public AsignaturaGrupo getCurso() {
+		return this.curso;
 	}
-	public void setAsignatura(AsignaturaGrupo asignatura) {
-		this.asignatura = asignatura;
+	public void setCurso(AsignaturaGrupo curso) {
+		this.curso = curso;
 	}
 	
 	

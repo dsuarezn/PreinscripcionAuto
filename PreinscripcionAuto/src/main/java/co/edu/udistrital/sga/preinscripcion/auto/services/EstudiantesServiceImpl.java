@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import co.edu.udistrital.sga.preinscripcion.auto.persistence.repositories.oracle
 
 @Service
 @Transactional
+@Qualifier("estudiantesServiceImpl")
 public class EstudiantesServiceImpl implements EstudiantesService {
 
 	@Autowired
@@ -26,7 +28,7 @@ public class EstudiantesServiceImpl implements EstudiantesService {
 	@Override
 	public List<Estudiante> obtenerListaEstudiantes() {
 		
-		List<SgaClasificacionEstudiante> clasificacionList= sgaClasificacionEstudianteRepository.findAll();
+		List<SgaClasificacionEstudiante> clasificacionList= sgaClasificacionEstudianteRepository.findAllByOrderByCleClasificacion();
 		List<Acest> estudianteList=acestRepository.findByEstEstadoEstContaining("A");
 		List<Estudiante> listaDominio=new ArrayList<>();
 		
