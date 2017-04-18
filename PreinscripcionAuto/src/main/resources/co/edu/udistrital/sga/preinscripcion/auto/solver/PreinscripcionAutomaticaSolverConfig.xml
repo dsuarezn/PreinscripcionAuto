@@ -9,7 +9,7 @@
 	</scoreDirectorFactory>
 	<localSearch>
 		<termination>
-			<secondsSpentLimit>1</secondsSpentLimit>
+			<secondsSpentLimit>120</secondsSpentLimit>
 			<!-- <bestScoreLimit>0hard/0soft</bestScoreLimit> -->
 		</termination>
 		<acceptor>

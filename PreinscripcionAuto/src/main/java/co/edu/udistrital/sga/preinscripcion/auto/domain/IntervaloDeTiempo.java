@@ -9,7 +9,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * fact emuneration
  */
 
-@XStreamAlias("IntervaloDeTiempo")
+//@XStreamAlias("IntervaloDeTiempo")
 public enum IntervaloDeTiempo {
 
 	 H_6AM ("06:00", 6),

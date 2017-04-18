@@ -14,12 +14,7 @@ import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.impl.score.buildin.hardsoft.HardSoftScoreDefinition;
 import org.optaplanner.persistence.xstream.impl.score.XStreamScoreConverter;
-import org.springframework.beans.factory.annotation.Autowire;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 
 import co.edu.udistrital.sga.preinscripcion.auto.domain.solver.ConflictoCursos;
@@ -29,7 +24,7 @@ import co.edu.udistrital.sga.preinscripcion.auto.services.ProyectoService;
 
 
 @PlanningSolution
-@XStreamAlias("PreinscripcionAsignaturasSolution")
+//@XStreamAlias("PreinscripcionAsignaturasSolution")
 public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore> {
 
 //	@Autowired
@@ -53,19 +48,19 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 	 * Listas de hechos
 	 * A continuación estan las listas de echos del problema de planificacion
 	 */	
-	private List<AsignaturaGrupo> listaAsignaturasVigentes;
+//	private List<AsignaturaGrupo> listaAsignaturasVigentes;
 	private List<Estudiante> listaEstudiantesActivos;
 	private List<ConflictoCursos> listaDeConflictos;
-	private List<AsignaturaRequerida> listaAsignaturasPorDemanda;
+//	private List<AsignaturaRequerida> listaAsignaturasPorDemanda;
 
 	
-	private List<EstudianteXCurso> listaProgramaciónEstudiantes;
+	private List<EstudianteXCurso> listaProgramacionEstudiantes;
 	 
 	@XStreamConverter(value = XStreamScoreConverter.class, types = {HardSoftScoreDefinition.class})
     private HardSoftScore score;
 	
 	@Override
-	public HardSoftScore getScore() {
+	public HardSoftScore getScore() {	
 		return score;
 	}
 
@@ -77,8 +72,9 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 	@Override
 	public Collection<? extends Object> getProblemFacts() {
 		List<Object> facts = new ArrayList<Object>();
-        facts.add(listaEstudiantesActivos);
-        facts.add(listaAsignaturasVigentes);
+//        facts.add(listaEstudiantesActivos);
+//        facts.add(listaAsignaturasVigentes);
+        facts.add(listaDeConflictos);
         return facts;
 	}
 	
@@ -92,13 +88,13 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 		this.listaDeConflictos = listaDeConflictos;
 	}
 
-	public List<AsignaturaGrupo> getListaAsignaturasVigentes() {
-		return listaAsignaturasVigentes;
-	}
-
-	public void setListaAsignaturasVigentes(List<AsignaturaGrupo> listaAsignaturasVigentes) {
-		this.listaAsignaturasVigentes = listaAsignaturasVigentes;
-	}
+//	public List<AsignaturaGrupo> getListaAsignaturasVigentes() {
+//		return listaAsignaturasVigentes;
+//	}
+//
+//	public void setListaAsignaturasVigentes(List<AsignaturaGrupo> listaAsignaturasVigentes) {
+//		this.listaAsignaturasVigentes = listaAsignaturasVigentes;
+//	}
 
 	@ValueRangeProvider(id = "rangoEstudiantes")
 	public List<Estudiante> getListaEstudiantesActivos() {
@@ -109,22 +105,34 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 		this.listaEstudiantesActivos = listaEstudiantesActivos;
 	}
 
+	
+	
 	@PlanningEntityCollectionProperty
-	public List<EstudianteXCurso> getListaProgramaciónEstudiantes() {
-		return listaProgramaciónEstudiantes;
+	public List<EstudianteXCurso> getListaProgramacionEstudiantes() {
+		
+		return listaProgramacionEstudiantes;
 	}
 
-	public void setListaProgramaciónEstudiantes(List<EstudianteXCurso> listaProgramaciónEstudiantes) {
-		this.listaProgramaciónEstudiantes = listaProgramaciónEstudiantes;
+	public void setListaProgramacionEstudiantes(List<EstudianteXCurso> listaProgramacionEstudiantes) {
+		this.listaProgramacionEstudiantes = listaProgramacionEstudiantes;
 	}
 
 	public void initFacts(Integer anio, Integer periodo, Long codCarrera){
+		List<AsignaturaGrupo> listaAsignaturasVigentes = new ArrayList<>();
+		List<AsignaturaRequerida> listaAsignaturasPorDemanda=new ArrayList<>();
 		this.listaEstudiantesActivos=estudiantesService.obtenerListaEstudiantes();
-		this.listaAsignaturasVigentes=cursosService.obtenerCursosProgramados(anio, periodo, codCarrera);
-		this.listaAsignaturasPorDemanda=cursosService.obtenerListaMateriasPreinsDemanda(anio, periodo, codCarrera,"%A%");
+		listaAsignaturasPorDemanda=cursosService.obtenerListaMateriasPreinsDemanda(anio, periodo, codCarrera,"%A%");
+		listaAsignaturasVigentes=cursosService.obtenerCursosProgramados(anio, periodo, codCarrera);		
 		establecerAsignaturasPorDemanda(listaEstudiantesActivos, listaAsignaturasPorDemanda);
 		establecerAsignaturasPosibles(listaEstudiantesActivos,listaAsignaturasVigentes);
-		this.listaDeConflictos=precalculateCourseConflictList(this.listaAsignaturasVigentes);
+		this.listaDeConflictos=precalculateCourseConflictList(listaAsignaturasVigentes);
+		if(listaProgramacionEstudiantes==null){
+			listaProgramacionEstudiantes=new ArrayList<EstudianteXCurso>();
+			EstudianteXCurso escu=new EstudianteXCurso();
+			escu.setEstudiante(this.listaEstudiantesActivos.get(0));
+			escu.setCurso(listaAsignaturasVigentes.get(0));
+			listaProgramacionEstudiantes.add(new EstudianteXCurso());
+		}
 	}
 	
 	public void establecerAsignaturasPorDemanda(List<Estudiante> listaEstudiantes, List<AsignaturaRequerida> listaAsignaturasPorDemanda){
@@ -133,12 +141,22 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 		}
 	}
 	public void establecerAsignaturasPosibles(List<Estudiante> listaEstudiantes, List<AsignaturaGrupo> listaAsignaturasProgramadas){
-		for (Estudiante estudiante : listaEstudiantes) {
-			List<AsignaturaRequerida> listaCodigosAsignaturas=estudiante.getPreinscripcionPorDemanda();			
-			List<AsignaturaGrupo> listaAsignaturasPermitidas=listaAsignaturasProgramadas.stream().filter(e->listaCodigosAsignaturas.contains(e.getCodigoAsignatura())).collect(Collectors.toList());
-			listaAsignaturasPermitidas.stream().forEach(f->f.setCreditosOptional(listaCodigosAsignaturas.stream().filter(a->a.getCodigoAsignatura().equals(f.getCodigoAsignatura())).map(AsignaturaRequerida::getCreditos).findFirst()));			
+		for (Estudiante estudiante : listaEstudiantes) {			
+			
+			List<AsignaturaRequerida> listaCodigosAsigxDemanda=estudiante.getPreinscripcionPorDemanda();	
+			List<AsignaturaGrupo> listaAsignaturasPermitidas = new ArrayList<>();
+			for (AsignaturaRequerida asignaturaRequerida : listaCodigosAsigxDemanda) 
+			{
+				List<AsignaturaGrupo> listaTemporalAsignaturas=listaAsignaturasProgramadas.stream().filter(e->asignaturaRequerida.getCodigoAsignatura().equals(e.getCodigoAsignatura())).collect(Collectors.toList());
+				listaTemporalAsignaturas.stream().forEach(f->f.setCreditosOptional(listaCodigosAsigxDemanda.stream().filter(a->a.getCodigoAsignatura().equals(f.getCodigoAsignatura())).map(AsignaturaRequerida::getCreditos).findFirst()));							
+				listaAsignaturasPermitidas.addAll(listaTemporalAsignaturas);
+			}			
 			estudiante.setAsignaturasPosibles(listaAsignaturasPermitidas);
 		}
+	}
+	
+	public List<AsignaturaGrupo> establecerCreditosAsignaturas(List<AsignaturaRequerida> listaAsignaturasDemanda, List<AsignaturaGrupo> listaAsignaturasProg){
+		return null;
 	}
 
 	

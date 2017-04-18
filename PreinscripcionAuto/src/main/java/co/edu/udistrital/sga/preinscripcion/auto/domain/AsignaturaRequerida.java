@@ -14,7 +14,7 @@ import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistab
  * fact de listado de asignaturas
  */
 @Data
-@XStreamAlias("AsignaturaRequerida")
+//@XStreamAlias("AsignaturaRequerida")
 public class AsignaturaRequerida extends AbstractPersistable {
 
 	//private Asignatura asignatura;

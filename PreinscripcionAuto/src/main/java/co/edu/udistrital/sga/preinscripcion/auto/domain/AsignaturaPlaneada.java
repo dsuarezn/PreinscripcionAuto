@@ -18,7 +18,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * fact asignaturas por grupos generadas
  */
 @Data 
-@XStreamAlias("AsignaturaGrupo")
+//@XStreamAlias("AsignaturaGrupo")
 public class AsignaturaPlaneada extends AbstractPersistable {
 	
 	@PlanningVariable(valueRangeProviderRefs= {"rowRange"})

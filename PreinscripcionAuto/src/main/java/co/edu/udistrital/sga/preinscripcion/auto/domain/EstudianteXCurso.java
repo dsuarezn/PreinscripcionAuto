@@ -11,7 +11,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
 
 @PlanningEntity
-@XStreamAlias("ProgramacionEstudiante")
+//@XStreamAlias("ProgramacionEstudiante")
 public class EstudianteXCurso extends AbstractPersistable {
 
 	private Estudiante estudiante;

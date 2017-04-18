@@ -9,9 +9,12 @@ import java.util.concurrent.Executors;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.optaplanner.core.api.domain.solution.Solution;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
+import org.optaplanner.core.impl.score.director.ScoreDirector;
+import org.optaplanner.core.impl.score.director.ScoreDirectorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -47,7 +50,9 @@ public class PreinscripcionAutomaticaSolverManagerImpl implements Serializable, 
 
 	private ExecutorService executor;
 	
-	@PostConstruct
+	public static ScoreDirector scoreDirector;
+	
+//	@PostConstruct
 	public synchronized void init(){
 		log.info("entro en inicia manager");
 		 solverFactory = SolverFactory.createFromXmlResource(SOLVER_CONFIG);
@@ -61,7 +66,7 @@ public class PreinscripcionAutomaticaSolverManagerImpl implements Serializable, 
 	        sessionSolverMap = new ConcurrentHashMap<>();
 	}
 	
-	@PreDestroy
+//	@PreDestroy
 	public synchronized void destroy(){
 		log.info("entro en destroy");
 		   for (Solver<PreinscripcionAsignaturasSolution> solver : sessionSolverMap.values()) {
@@ -111,6 +116,18 @@ public class PreinscripcionAutomaticaSolverManagerImpl implements Serializable, 
 	        } else {
 	            return false;
 	        }
+	}
+	
+	public PreinscripcionAsignaturasSolution testSolver() {
+		Solver solver = SolverFactory.createFromXmlResource(SOLVER_CONFIG).buildSolver();
+		ScoreDirectorFactory scoreDirectorFactory = solver.getScoreDirectorFactory();
+		scoreDirector = scoreDirectorFactory.buildScoreDirector();
+		PreinscripcionAsignaturasSolution preSolution = new PreinscripcionAsignaturasSolution(proyectoService, cursosService, estudiantesService);
+		preSolution.initFacts(2017, 1, 25L);
+		scoreDirector.setWorkingSolution(preSolution);		
+		solver.solve(preSolution);
+		PreinscripcionAsignaturasSolution bestPreSolution = (PreinscripcionAsignaturasSolution) solver.getBestSolution();
+		return bestPreSolution;
 	}
 	
 }

@@ -38,7 +38,7 @@ public class PreinscripcionAutomaticaRestControllerImpl {
 	}
 	
 	protected JsonPreinscripcionAutomaticaSolution convertToJsonPreinscripcionAutomaticaSolution(PreinscripcionAsignaturasSolution solution){
-		return new JsonPreinscripcionAutomaticaSolution(solution.getListaProgramaciónEstudiantes());
+		return new JsonPreinscripcionAutomaticaSolution(solution.getListaProgramacionEstudiantes());
 	}
 
 	@RequestMapping(value = "/solution/solve", method = RequestMethod.GET, produces = "application/json")
@@ -53,6 +53,16 @@ public class PreinscripcionAutomaticaRestControllerImpl {
 		return new JsonMessage(success ? "Solver terminating early." : "Solver was already terminated.");
 	}
 
-
+	@RequestMapping(value = "/solution/solve/static", method = RequestMethod.GET, produces = "application/json")
+	public JsonPreinscripcionAutomaticaSolution solveStatic(HttpServletRequest request) {
+		try {
+			PreinscripcionAsignaturasSolution solution = preinscripcionAutomaticaSolverManagerImpl.testSolver();
+			return convertToJsonPreinscripcionAutomaticaSolution(solution);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 }

@@ -12,7 +12,7 @@ import lombok.Data;
  * Asignatura fact class
  */
 @Data
-@XStreamAlias("Asignatura")
+//@XStreamAlias("Asignatura")
 public class Asignatura extends AbstractPersistable {
 
 	private Integer creditos;

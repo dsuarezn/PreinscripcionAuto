@@ -14,7 +14,7 @@ import lombok.Data;
  * facts de grupos generados con materias
  */
 @Data
-@XStreamAlias("Grupo")
+//@XStreamAlias("Grupo")
 public class Grupo extends AbstractPersistable {
 
 	private Integer anio;

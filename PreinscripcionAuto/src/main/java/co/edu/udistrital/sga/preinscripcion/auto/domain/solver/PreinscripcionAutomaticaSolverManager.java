@@ -16,4 +16,5 @@ public interface PreinscripcionAutomaticaSolverManager extends Serializable{
 	
 	public boolean terminateEarly(String sessionid);
 	
+	public PreinscripcionAsignaturasSolution testSolver();
 }

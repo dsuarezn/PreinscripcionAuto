@@ -14,7 +14,7 @@ import lombok.Data;
  * @created 07-feb.-2017 15:56:31
  */
 @Data
-@XStreamAlias("PlanDeEstudios")
+//@XStreamAlias("PlanDeEstudios")
 public class PlanDeEstudios extends AbstractPersistable {
 
 	private String nombrePlanEstudios;

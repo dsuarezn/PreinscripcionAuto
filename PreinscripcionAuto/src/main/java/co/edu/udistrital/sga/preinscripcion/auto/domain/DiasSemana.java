@@ -8,7 +8,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @created 07-feb.-2017 15:56:31
  * fact emuneration
  */
-@XStreamAlias("DiasSemana")
+//@XStreamAlias("DiasSemana")
 public enum DiasSemana {
 
 	 D_LUNES ("Lunes", 1), 

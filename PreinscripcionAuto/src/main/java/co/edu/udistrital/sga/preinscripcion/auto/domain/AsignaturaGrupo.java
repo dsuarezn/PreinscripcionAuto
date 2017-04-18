@@ -26,7 +26,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@XStreamAlias("AsignaturaGrupo")
+//@XStreamAlias("AsignaturaGrupo")
 public class AsignaturaGrupo extends AbstractPersistable {
 	
 	private Long idAsignaturaGrupo;

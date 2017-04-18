@@ -12,7 +12,7 @@ import lombok.Data;
  * fact ubicacion
  */
 @Data
-@XStreamAlias("Ubicacion")
+//@XStreamAlias("Ubicacion")
 public class Ubicacion extends AbstractPersistable {
 
 	private Long idUbicacion;
