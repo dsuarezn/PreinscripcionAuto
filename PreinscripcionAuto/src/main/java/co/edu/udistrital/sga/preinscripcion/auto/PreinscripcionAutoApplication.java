@@ -20,21 +20,34 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 
 @SpringBootApplication
 @EnableCaching
-public class PreinscripcionAutoApplication {
+public class PreinscripcionAutoApplication extends SpringBootServletInitializer {
 
 	private static Log logger = LogFactory.getLog(PreinscripcionAutoApplication.class);
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(PreinscripcionAutoApplication.class, args);
-	}
-
+	}	
 	
-
-	
+	  @Override
+	    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+	        return application.sources(PreinscripcionAutoApplication.class);
+	    }
 }
+
+
+//@SpringBootApplication
+//@EnableCaching
+//public class PreinscripcionAutoApplication  {
+//
+//	private static Log logger = LogFactory.getLog(PreinscripcionAutoApplication.class);
+//
+//	public static void main(String[] args) throws Exception {
+//		SpringApplication.run(PreinscripcionAutoApplication.class, args);
+//	}	
+//}

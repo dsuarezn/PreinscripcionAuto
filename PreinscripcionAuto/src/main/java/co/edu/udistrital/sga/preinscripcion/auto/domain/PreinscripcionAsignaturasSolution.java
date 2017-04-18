@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
@@ -12,12 +13,9 @@ import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.Solution;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
-import org.optaplanner.core.impl.score.buildin.hardsoft.HardSoftScoreDefinition;
-import org.optaplanner.persistence.xstream.impl.score.XStreamScoreConverter;
-
-import com.thoughtworks.xstream.annotations.XStreamConverter;
 
 import co.edu.udistrital.sga.preinscripcion.auto.domain.solver.ConflictoCursos;
+import co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle.Achorario;
 import co.edu.udistrital.sga.preinscripcion.auto.services.CursosService;
 import co.edu.udistrital.sga.preinscripcion.auto.services.EstudiantesService;
 import co.edu.udistrital.sga.preinscripcion.auto.services.ProyectoService;
@@ -34,7 +32,9 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 //	@Autowired
     private EstudiantesService estudiantesService;
 
-	
+    public PreinscripcionAsignaturasSolution(){
+    	
+    }
 
 	public PreinscripcionAsignaturasSolution(ProyectoService proyectoService, CursosService cursosService,
 			EstudiantesService estudiantesService) {
@@ -56,7 +56,7 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 	
 	private List<EstudianteXCurso> listaProgramacionEstudiantes;
 	 
-	@XStreamConverter(value = XStreamScoreConverter.class, types = {HardSoftScoreDefinition.class})
+//	@XStreamConverter(value = XStreamScoreConverter.class, types = {HardSoftScoreDefinition.class})
     private HardSoftScore score;
 	
 	@Override
@@ -126,13 +126,37 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 		establecerAsignaturasPorDemanda(listaEstudiantesActivos, listaAsignaturasPorDemanda);
 		establecerAsignaturasPosibles(listaEstudiantesActivos,listaAsignaturasVigentes);
 		this.listaDeConflictos=precalculateCourseConflictList(listaAsignaturasVigentes);
-		if(listaProgramacionEstudiantes==null){
-			listaProgramacionEstudiantes=new ArrayList<EstudianteXCurso>();
-			EstudianteXCurso escu=new EstudianteXCurso();
-			escu.setEstudiante(this.listaEstudiantesActivos.get(0));
-			escu.setCurso(listaAsignaturasVigentes.get(0));
-			listaProgramacionEstudiantes.add(new EstudianteXCurso());
+		listaProgramacionEstudiantes=constructPreSolution(this.listaEstudiantesActivos);
+		listaEstudiantesActivos=removerEstudiantesSinPosibilidades(this.listaEstudiantesActivos);
+	}
+	
+	public List<EstudianteXCurso> constructPreSolution(List<Estudiante> listaEstudiantes){
+		List<EstudianteXCurso> preSolution=new ArrayList<>();
+		for (Estudiante estudiante : listaEstudiantes) {
+			Map<Long, List<AsignaturaGrupo>> agrupados=estudiante.getAsignaturasPosibles().stream().collect(Collectors.groupingBy(AsignaturaGrupo::getCodigoAsignatura));	
+			for (Entry<Long, List<AsignaturaGrupo>> entry : agrupados.entrySet()) {
+				EstudianteXCurso escur=new EstudianteXCurso();
+				escur.setEstudiante(estudiante);
+				escur.setCurso(entry.getValue().stream().findAny().get());
+				preSolution.add(escur);
+			}
 		}
+		return preSolution;		
+	}
+	
+	
+	public List<Estudiante> removerEstudiantesSinPosibilidades(List<Estudiante> listaEstudiantes){
+		List<Estudiante> listaTemporal=new ArrayList<>();
+		for (Estudiante estudiante : listaEstudiantes) {
+			if(estudiante.getAsignaturasPosibles()!=null && estudiante.getAsignaturasPosibles().size()>0){
+				listaTemporal.add(estudiante);
+			}
+			else{
+				System.out.println(estudiante.getCodigo()+":");
+				estudiante.getAsignaturasPosibles().stream().forEach(item->System.out.println(item));
+			}
+		}
+		return listaTemporal;
 	}
 	
 	public void establecerAsignaturasPorDemanda(List<Estudiante> listaEstudiantes, List<AsignaturaRequerida> listaAsignaturasPorDemanda){
@@ -192,7 +216,31 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 		 }
 	 }
 
+	public ProyectoService getProyectoService() {
+		return proyectoService;
+	}
 
+	public void setProyectoService(ProyectoService proyectoService) {
+		this.proyectoService = proyectoService;
+	}
+
+	public CursosService getCursosService() {
+		return cursosService;
+	}
+
+	public void setCursosService(CursosService cursosService) {
+		this.cursosService = cursosService;
+	}
+
+	public EstudiantesService getEstudiantesService() {
+		return estudiantesService;
+	}
+
+	public void setEstudiantesService(EstudiantesService estudiantesService) {
+		this.estudiantesService = estudiantesService;
+	}
+
+	 
 	 
 	 
 

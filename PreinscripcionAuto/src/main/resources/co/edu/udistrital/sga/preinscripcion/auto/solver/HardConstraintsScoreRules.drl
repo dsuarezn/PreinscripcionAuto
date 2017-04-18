@@ -43,8 +43,8 @@ end
 
 rule "asignaturasSoloProgramanUnavez"
     when       
-       $leftCurso : EstudianteXCurso($leftCourse : getCurso(), $estudiante : getEstudiante())
-       $rightCurso : EstudianteXCurso(curso.codigoAsignatura == $leftCourse.codigoAsignatura, curso.idAsignaturaGrupo != $leftCourse.idAsignaturaGrupo,  estudiante == $estudiante )
+       $leftCurso : EstudianteXCurso($leftCourse : getCurso(), $estudiante : getEstudiante() , getCurso() != null, getEstudiante()!= null)
+       $rightCurso : EstudianteXCurso(getCurso() != null, getEstudiante()!= null, getCurso().codigoAsignatura == $leftCourse.codigoAsignatura, getCurso().idAsignaturaGrupo != $leftCourse.idAsignaturaGrupo,  estudiante == $estudiante )
     then
         scoreHolder.addHardConstraintMatch(kcontext, - 5);
 end
@@ -61,8 +61,8 @@ end
 rule "cursosNoSobreOcupados" 
     when
        $estudianteCurso : EstudianteXCurso($cursoReferencia : getCurso())
-       $estudiantesProgramadosCount : Long() from accumulate($cursoReferenciado : EstudianteXCurso(curso == $cursoReferencia, estudiante != null), count($cursoReferenciado))
-       $estudianteCursoOk : EstudianteXCurso(curso == $cursoReferencia, curso.cupos < $estudiantesProgramadosCount.intValue())
+       $estudiantesProgramadosCount : Long() from accumulate($cursoReferenciado : EstudianteXCurso(getCurso() != null,curso == $cursoReferencia, estudiante != null), count($cursoReferenciado))
+       $estudianteCursoOk : EstudianteXCurso(getCurso() != null, curso == $cursoReferencia, curso.cupos < $estudiantesProgramadosCount.intValue())
     then
         scoreHolder.addHardConstraintMatch(kcontext, - $estudiantesProgramadosCount.intValue());
 end
@@ -70,7 +70,7 @@ end
 rule "estudianteNoPuedeExcederCreditos" 
     when
        $estudianteRef : Estudiante()
-       $sumaCreditosEstudiante : Number() from accumulate(EstudianteXCurso(estudiante == $estudianteRef,curso != null, $cursoRef : getCurso()), sum($cursoRef.getCreditos()))
+       $sumaCreditosEstudiante : Number() from accumulate(EstudianteXCurso(getCurso() != null,estudiante == $estudianteRef,curso != null, $cursoRef : getCurso()), sum($cursoRef.getCreditos()))
        eval(creditosMaximos < $sumaCreditosEstudiante.intValue())
     then
         scoreHolder.addHardConstraintMatch(kcontext, - $sumaCreditosEstudiante.intValue());

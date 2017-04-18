@@ -122,5 +122,9 @@ public class AsignaturaGrupo extends AbstractPersistable {
 		this.creditos=value.get();
 	}
 	
+	@Override
+	public String toString(){
+		return "asignatureCode:"+this.codigoAsignatura+": asigId:"+this.idAsignaturaGrupo;
+	}
 
 }

@@ -38,6 +38,9 @@ public class EstudianteXCurso extends AbstractPersistable {
 		this.curso = curso;
 	}
 	
-	
+	@Override
+	public String toString(){
+		return "{"+this.estudiante+"} : {"+this.curso+"}";
+	}
 	
 }

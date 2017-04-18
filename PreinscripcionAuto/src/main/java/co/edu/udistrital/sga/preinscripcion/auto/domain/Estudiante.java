@@ -107,5 +107,9 @@ public class Estudiante extends AbstractPersistable{
 //		return (100/clasificacion.doubleValue())*(porcentajeCompletitud);			
 //	}
 	
+	@Override
+	public String toString(){
+		return "studentCode:"+this.getCodigo()+": name:"+this.nombre;
+	}
 	
 }

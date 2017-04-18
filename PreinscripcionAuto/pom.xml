@@ -12,7 +12,7 @@
 		<name>Universidad Distrital Francisco Jose de Caldas - Sistema de Gestión Academica</name>
 		<url>https://estudiantes.portaloas.udistrital.edu.co/appserv/</url>
 	</organization>
-	
+	<packaging>war</packaging>
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
 		<version.optaplanner>6.5.0.Final</version.optaplanner>
@@ -61,13 +61,18 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-<!-- 			 <exclusions> -->
-<!-- 		        <exclusion> -->
-<!-- 		          <groupId>org.springframework.boot</groupId> -->
-<!-- 		          <artifactId>spring-boot-starter-tomcat</artifactId> -->
-<!-- 		        </exclusion> -->
-<!-- 		     </exclusions> -->
+			 <exclusions>
+		        <exclusion>
+		          <groupId>org.springframework.boot</groupId>
+		          <artifactId>spring-boot-starter-tomcat</artifactId>
+		        </exclusion>
+		     </exclusions>
 		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.boot</groupId> -->
+<!-- 			<artifactId>spring-boot-starter-tomcat</artifactId> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -121,6 +126,12 @@
 	      <artifactId>javax.servlet-api</artifactId>
 	      <scope>provided</scope>
 	    </dependency>
+	    <dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+		    <version>1.1.7</version>
+		</dependency>
+
 	    
 <!-- 	    <dependency> -->
 <!-- 	        <groupId>com.h2database</groupId> -->
@@ -129,12 +140,22 @@
 <!-- 	    </dependency> -->
         
          <!-- optaplanner dependencias -->
-        
+<!--         <dependency> -->
+<!--         <groupId>org.eclipse.jdt.core.compiler</groupId> -->
+<!--         <artifactId>ecj</artifactId> -->
+<!--         <version>4.5.1</version> -->
+<!--     </dependency> -->
          
 	    <dependency>
 	      <groupId>org.optaplanner</groupId>
 	      <artifactId>optaplanner-core</artifactId>
 	      <version>${version.optaplanner}</version>
+<!-- 	      <exclusions> -->
+<!-- 	      	<exclusion> -->
+<!-- 	      		<artifactId>ecj</artifactId> -->
+<!-- 	      		<groupId>org.eclipse.jdt.core.compiler</groupId> -->
+<!-- 	      	</exclusion> -->
+<!-- 	      </exclusions> -->
 	    </dependency>
 	    <dependency>
 	      <groupId>org.optaplanner</groupId>
@@ -143,49 +164,62 @@
 	      <type>test-jar</type>
 	      <scope>test</scope>
 	    </dependency>
-	    <dependency>
-	      <groupId>org.optaplanner</groupId>
-	      <artifactId>optaplanner-persistence-common</artifactId>
-	      <version>${version.optaplanner}</version>
-	    </dependency>
-	    <dependency>
-	      <groupId>org.optaplanner</groupId>
-	      <artifactId>optaplanner-persistence-xstream</artifactId>
-	      <version>${version.optaplanner}</version>
-	    </dependency>
-	    <dependency>
-	      <groupId>org.optaplanner</groupId>
-	      <artifactId>optaplanner-benchmark</artifactId>
-	      <version>${version.optaplanner}</version>
-	    </dependency>
-	    <dependency>
-	      <groupId>org.drools</groupId>
-	      <artifactId>drools-decisiontables</artifactId>
-	      <version>${version.optaplanner}</version>
-	    </dependency>
+<!-- 	    <dependency> -->
+<!-- 	      <groupId>org.optaplanner</groupId> -->
+<!-- 	      <artifactId>optaplanner-persistence-common</artifactId> -->
+<!-- 	      <version>${version.optaplanner}</version> -->
+<!-- 	    </dependency> -->
+<!-- 	    <dependency> -->
+<!-- 	      <groupId>org.optaplanner</groupId> -->
+<!-- 	      <artifactId>optaplanner-persistence-xstream</artifactId> -->
+<!-- 	      <version>${version.optaplanner}</version> -->
+<!-- 	    </dependency> -->
+<!-- 	    <dependency> -->
+<!-- 	      <groupId>org.optaplanner</groupId> -->
+<!-- 	      <artifactId>optaplanner-benchmark</artifactId> -->
+<!-- 	      <version>${version.optaplanner}</version> -->
+<!-- 	    </dependency> -->
+<!-- 	    <dependency> -->
+<!-- 	      <groupId>org.drools</groupId> -->
+<!-- 	      <artifactId>drools-decisiontables</artifactId> -->
+<!-- 	      <version>${version.optaplanner}</version> -->
+<!-- 	    </dependency> -->
 
-	    <dependency>
-	    	<groupId>org.scala-lang</groupId>
-	    	<artifactId>scala-library</artifactId>
-	    	<version>2.11.0</version>
-	    </dependency>
-	    <dependency>
-	    	<groupId>org.apache.hadoop</groupId>
-	    	<artifactId>hadoop-core</artifactId>
-	    	<version>1.0.0</version>
-	    </dependency>
-	    <dependency>
-	    	<groupId>com.goldmansachs</groupId>
-	    	<artifactId>gs-collections</artifactId>
-	    	<version>5.1.0</version>
-	    </dependency>
+<!-- 	    <dependency> -->
+<!-- 	    	<groupId>org.scala-lang</groupId> -->
+<!-- 	    	<artifactId>scala-library</artifactId> -->
+<!-- 	    	<version>2.11.0</version> -->
+<!-- 	    </dependency> -->
+<!-- 	    <dependency> -->
+<!-- 	    	<groupId>org.apache.hadoop</groupId> -->
+<!-- 	    	<artifactId>hadoop-core</artifactId> -->
+<!-- 	    	<version>1.0.0</version> -->
+<!-- 	    </dependency> -->
+<!-- 	    <dependency> -->
+<!-- 	    	<groupId>com.goldmansachs</groupId> -->
+<!-- 	    	<artifactId>gs-collections</artifactId> -->
+<!-- 	    	<version>5.1.0</version> -->
+<!-- 	    </dependency> -->
 	</dependencies>
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
+<!-- 		<plugins> -->
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.springframework.boot</groupId> -->
+<!-- 				<artifactId>spring-boot-maven-plugin</artifactId> -->
+<!-- 			</plugin> -->
+<!-- 			<plugin> -->
+<!--                     <groupId>org.apache.tomcat.maven</groupId> -->
+<!--                     <artifactId>tomcat7-maven-plugin</artifactId> -->
+<!--                     <version>2.2</version> -->
+<!--                     <configuration> -->
+<!--                         <url>http://localhost:7778/manager/text</url> -->
+<!--                         <server>TomcatServer8</server> -->
+<!--                         <path>/PreinscripcionAuto</path> -->
+<!--                         <username>maven</username> -->
+<!--         				<password>admin</password>        -->
+<!--                     </configuration> -->
+<!--                 </plugin> -->
+<!-- 		</plugins> -->
 	</build>
+	
 </project>
