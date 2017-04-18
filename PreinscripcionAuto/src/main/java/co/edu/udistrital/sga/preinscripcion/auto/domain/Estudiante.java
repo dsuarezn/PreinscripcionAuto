@@ -24,7 +24,6 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 //@XStreamAlias("Estudiante")
 public class Estudiante extends AbstractPersistable{
 
-
 	private List<AsignaturaRequerida> preinscripcionPorDemanda;	
 	private List<AsignaturaGrupo> asignaturasPosibles;
 	private List<AsignaturaGrupo> asignaturasProgramadas;
@@ -39,7 +38,7 @@ public class Estudiante extends AbstractPersistable{
 	
 //	private Integer periodoIngreso;
 //	private Integer creditosMaximosPorPeriodo;
-//	
+//	sdasdas
 	
 
 	public Estudiante(){
