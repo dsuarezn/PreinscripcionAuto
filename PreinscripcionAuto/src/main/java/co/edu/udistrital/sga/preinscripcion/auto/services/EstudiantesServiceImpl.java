@@ -1,6 +1,7 @@
 package co.edu.udistrital.sga.preinscripcion.auto.services;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ import co.edu.udistrital.sga.preinscripcion.auto.persistence.repositories.oracle
 @Qualifier("estudiantesServiceImpl")
 public class EstudiantesServiceImpl implements EstudiantesService {
 
+	
+	private final Integer CLASIFICACION_MINIMA=6;
+	
 	@Autowired
 	private SgaClasificacionEstudianteRepository sgaClasificacionEstudianteRepository;
 	
@@ -29,7 +33,9 @@ public class EstudiantesServiceImpl implements EstudiantesService {
 	public List<Estudiante> obtenerListaEstudiantes() {
 		
 		List<SgaClasificacionEstudiante> clasificacionList= sgaClasificacionEstudianteRepository.findAllByOrderByCleClasificacion();
-		List<Acest> estudianteList=acestRepository.findByEstEstadoEstContaining("A");
+//		List<Acest> estudianteList=acestRepository.findByEstEstadoEstContaining("A");
+//		List<Acest> estudianteList=acestRepository.findByEstCod(20122025041L);
+		List<Acest> estudianteList=acestRepository.findByEstCodLessThan(20142025041L);
 		List<Estudiante> listaDominio=new ArrayList<>();
 		
 		for (Acest estudiante : estudianteList) {
@@ -42,8 +48,14 @@ public class EstudiantesServiceImpl implements EstudiantesService {
 			if(result!=null){
 				estd.setTipo(result.getCle_tipoEstudiante());
 				estd.setClasificacion(result.getCleClasificacion());
-			}		
+			}	
+			else{
+				System.out.println("Estudiante sin clasificacion:"+estd.getCodigo());
+				estd.setClasificacion(CLASIFICACION_MINIMA);
+			}
 			listaDominio.add(estd);
+			
+			
 		}
 		return listaDominio;
 	}

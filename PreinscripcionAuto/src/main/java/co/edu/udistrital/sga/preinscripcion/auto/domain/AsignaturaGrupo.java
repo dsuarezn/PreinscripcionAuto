@@ -124,7 +124,7 @@ public class AsignaturaGrupo extends AbstractPersistable {
 	
 	@Override
 	public String toString(){
-		return "asignatureCode:"+this.codigoAsignatura+": asigId:"+this.idAsignaturaGrupo;
+		return "ac:"+this.codigoAsignatura+": aid:"+this.idAsignaturaGrupo;
 	}
 
 }

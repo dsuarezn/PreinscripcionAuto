@@ -21,12 +21,15 @@ public class Horario extends AbstractPersistable {
 
 	private DiasSemana diaSemana;
 	public List<IntervaloDeTiempo> m_Franjas;
-
+	public List<Integer> franjasEnteras;
+	
 	public Horario(DiasSemana dia, List<IntervaloDeTiempo> deTiempos ){
 		this.diaSemana=dia;
 		this.m_Franjas=new ArrayList<IntervaloDeTiempo>();
+		this.franjasEnteras=new ArrayList<Integer>();
 		for (IntervaloDeTiempo intervaloDeTiempo : deTiempos) {
 			m_Franjas.add(intervaloDeTiempo);
+			franjasEnteras.add(intervaloDeTiempo.getHora24Entera());
 		}
 	}
 
@@ -58,6 +61,8 @@ public class Horario extends AbstractPersistable {
     	return haycruze;
     }
 	
-	
+	public String getNombreDia(){
+		return this.getDiaSemana().getNombreDia();
+	}
 
 }

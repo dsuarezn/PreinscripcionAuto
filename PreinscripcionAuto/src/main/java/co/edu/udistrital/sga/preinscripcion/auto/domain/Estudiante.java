@@ -109,7 +109,7 @@ public class Estudiante extends AbstractPersistable{
 	
 	@Override
 	public String toString(){
-		return "studentCode:"+this.getCodigo()+": name:"+this.nombre;
+		return "sc:"+this.getCodigo();
 	}
 	
 }

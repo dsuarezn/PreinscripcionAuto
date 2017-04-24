@@ -17,4 +17,7 @@ public interface AcestRepository extends JpaRepository<Acest, Long> {
 	
 	public List<Acest> findByEstEstadoEstContaining(String estEstadoEst);
 	
+	public List<Acest> findByEstCodLessThan(Long codigo);
+	public List<Acest> findByEstCod(Long codigo);
+	
 }

@@ -22,8 +22,8 @@ public class JsonPreinscripcionAutomaticaSolution {
  		for (Map.Entry<Estudiante, List<EstudianteXCurso>> entry : agrupados.entrySet())
 		{
  			Estudiante estudiante=entry.getKey();
- 			estudiante.setAsignaturasPosibles(null);
- 			estudiante.setPreinscripcionPorDemanda(null);
+// 			estudiante.setAsignaturasPosibles(null);
+// 			estudiante.setPreinscripcionPorDemanda(null);
  			List<AsignaturaGrupo> listaAsignaturas=new ArrayList<>();
  			for (EstudianteXCurso estcurso : entry.getValue()) {
 				listaAsignaturas.add(estcurso.getCurso());

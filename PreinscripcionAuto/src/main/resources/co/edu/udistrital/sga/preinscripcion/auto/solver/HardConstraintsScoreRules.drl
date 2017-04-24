@@ -1,7 +1,7 @@
 
 
 package org.edu.udistrital.sga.preinscripcion.auto.solver;
-    dialect "java"
+    dialect "mvel"
 
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.Asignatura;
@@ -22,11 +22,16 @@ import co.edu.udistrital.sga.preinscripcion.auto.domain.Ubicacion;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.solver.ConflictoCursos;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 global HardSoftScoreHolder scoreHolder;
 global java.lang.Integer creditosMaximos;
 
 
+	function String buildKey(Integer courseIdOne, Integer courseIdTwo){
+		String key=(courseIdOne<courseIdTwo?courseIdOne+"-"+courseIdTwo:courseIdTwo+"-"+courseIdOne);	
+		return key;
+	}
 	
 
 // ############################################################################
@@ -35,6 +40,7 @@ global java.lang.Integer creditosMaximos;
 
 rule "setearVariablesGlobales"
 salience 1000
+lock-on-active
     when
        	eval(creditosMaximos == null)
     then
@@ -43,37 +49,59 @@ end
 
 rule "asignaturasSoloProgramanUnavez"
     when       
-       $leftCurso : EstudianteXCurso($leftCourse : getCurso(), $estudiante : getEstudiante() , getCurso() != null, getEstudiante()!= null)
-       $rightCurso : EstudianteXCurso(getCurso() != null, getEstudiante()!= null, getCurso().codigoAsignatura == $leftCourse.codigoAsignatura, getCurso().idAsignaturaGrupo != $leftCourse.idAsignaturaGrupo,  estudiante == $estudiante )
+       $cursoIzq : EstudianteXCurso(curso != null, estudiante!= null, $codAsignatura : codigoAsignatura , $idAsignatura : idAsignaturaGrupo  , $codEstudiante : estudianteCodigo)
+       $cursoDer : EstudianteXCurso(curso != null, estudiante!= null, codigoAsignatura  == $codAsignatura ,  estudianteCodigo == $codEstudiante , idAsignaturaGrupo != $idAsignatura )
     then
-        scoreHolder.addHardConstraintMatch(kcontext, - 5);
+        scoreHolder.addHardConstraintMatch(kcontext, - 2);
 end
+
+rule "programarCursoSoloUnaVez"
+    when       
+       $cursoIzq : EstudianteXCurso(curso != null, estudiante!= null, $idAsignatura : idAsignaturaGrupo  , $codEstudiante : estudianteCodigo)
+       $cursoDer : EstudianteXCurso(curso != null, estudiante!= null, idAsignaturaGrupo == $idAsignatura , estudianteCodigo == $codEstudiante)
+       eval($cursoIzq != $cursoDer)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, - 2);
+end
+
+rule "programarSoloMateriasPreinscritasPorDemanda"
+    when       
+       $cursoIzq : EstudianteXCurso(curso != null, estudiante!= null, $codAsignatura : codigoAsignatura, listaCodigosPorDemanda not contains $codAsignatura)       
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -2);
+end
+
 
 rule "noPermitirCursosMismoHorario"
-    when
-       $courseConflict : ConflictoCursos($leftCourse : getLeftCourse(), $rightCourse : getRightCourse())
-       $leftEstudianteCurso : EstudianteXCurso(curso == $leftCourse,  curso != $rightCourse, $estudiante : getEstudiante())
-       $rightEstudianteCurso : EstudianteXCurso(curso == $rightCourse, curso == $leftCourse,  estudiante == $estudiante )
+    when       
+       $leftEstudianteCurso : EstudianteXCurso(curso != null, estudiante!= null, $leftCourseId : idAsignaturaGrupo, $codigoAlumno : estudianteCodigo )       
+       $rightEstudianteCurso : EstudianteXCurso(curso != null, estudiante!= null, $rightCourseId : idAsignaturaGrupo, idAsignaturaGrupo != $leftCourseId,  estudianteCodigo  == $codigoAlumno )              
+       eval($leftEstudianteCurso != $rightEstudianteCurso)
+       $mapa : Map(this[buildKey($leftCourseId,$rightCourseId)] > 0);       
     then
-        scoreHolder.addHardConstraintMatch(kcontext, - $courseConflict.getConflictCount());
-end
-
-rule "cursosNoSobreOcupados" 
-    when
-       $estudianteCurso : EstudianteXCurso($cursoReferencia : getCurso())
-       $estudiantesProgramadosCount : Long() from accumulate($cursoReferenciado : EstudianteXCurso(getCurso() != null,curso == $cursoReferencia, estudiante != null), count($cursoReferenciado))
-       $estudianteCursoOk : EstudianteXCurso(getCurso() != null, curso == $cursoReferencia, curso.cupos < $estudiantesProgramadosCount.intValue())
-    then
-        scoreHolder.addHardConstraintMatch(kcontext, - $estudiantesProgramadosCount.intValue());
+        scoreHolder.addHardConstraintMatch(kcontext, -2);
 end
 
 rule "estudianteNoPuedeExcederCreditos" 
-    when
-       $estudianteRef : Estudiante()
-       $sumaCreditosEstudiante : Number() from accumulate(EstudianteXCurso(getCurso() != null,estudiante == $estudianteRef,curso != null, $cursoRef : getCurso()), sum($cursoRef.getCreditos()))
-       eval(creditosMaximos < $sumaCreditosEstudiante.intValue())
+    when    
+       $leftEstudianteCurso : EstudianteXCurso(curso != null, estudiante!= null, $estudianteRef : estudiante )  
+       $sumaCreditosEstudiante : Number() from accumulate(EstudianteXCurso(curso != null, estudiante == $estudianteRef, $creditos : creditos ), sum($creditos))
+       eval($sumaCreditosEstudiante > creditosMaximos)
     then
-        scoreHolder.addHardConstraintMatch(kcontext, - $sumaCreditosEstudiante.intValue());
+        scoreHolder.addHardConstraintMatch(kcontext, -2);        
 end
+
+
+rule "cursosNoSobreOcupados" 
+    when
+       $estudianteCurso : EstudianteXCurso(curso != null, $cursoReferencia : curso, $cuposCurso : cupos)
+       $estudiantesProgramadosCount : Long() from accumulate($cursoReferenciado : EstudianteXCurso(curso != null,curso == $cursoReferencia, estudiante != null), count($cursoReferenciado))       
+       eval($cuposCurso<$estudiantesProgramadosCount.intValue())
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -2);
+end
+
+
+
 
 

@@ -76,5 +76,13 @@ public class ConflictoCursos implements Serializable, Comparable<ConflictoCursos
     public String toString() {
         return leftCourse + " & " + rightCourse;
     }
+    
+    public Long getLeftIdAsignaturaGrupo(){
+    	return leftCourse.getIdAsignaturaGrupo();
+    }
+    
+    public Long getRightIdAsignaturaGrupo(){
+    	return rightCourse.getIdAsignaturaGrupo();
+    }
 
 }

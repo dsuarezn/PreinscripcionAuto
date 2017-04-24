@@ -11,11 +11,8 @@ import java.util.stream.Collectors;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.Solution;
-import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
-import co.edu.udistrital.sga.preinscripcion.auto.domain.solver.ConflictoCursos;
-import co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle.Achorario;
 import co.edu.udistrital.sga.preinscripcion.auto.services.CursosService;
 import co.edu.udistrital.sga.preinscripcion.auto.services.EstudiantesService;
 import co.edu.udistrital.sga.preinscripcion.auto.services.ProyectoService;
@@ -50,7 +47,7 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 	 */	
 //	private List<AsignaturaGrupo> listaAsignaturasVigentes;
 	private List<Estudiante> listaEstudiantesActivos;
-	private List<ConflictoCursos> listaDeConflictos;
+	private Map<String, Integer> listaDeConflictos;
 //	private List<AsignaturaRequerida> listaAsignaturasPorDemanda;
 
 	
@@ -74,19 +71,13 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 		List<Object> facts = new ArrayList<Object>();
 //        facts.add(listaEstudiantesActivos);
 //        facts.add(listaAsignaturasVigentes);
-        facts.add(listaDeConflictos);
+        facts.add(this.listaDeConflictos);
+        facts.add(this.listaEstudiantesActivos);
         return facts;
 	}
 	
 	
-	
-	public List<ConflictoCursos> getListaDeConflictos() {
-		return listaDeConflictos;
-	}
 
-	public void setListaDeConflictos(List<ConflictoCursos> listaDeConflictos) {
-		this.listaDeConflictos = listaDeConflictos;
-	}
 
 //	public List<AsignaturaGrupo> getListaAsignaturasVigentes() {
 //		return listaAsignaturasVigentes;
@@ -96,7 +87,15 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 //		this.listaAsignaturasVigentes = listaAsignaturasVigentes;
 //	}
 
-	@ValueRangeProvider(id = "rangoEstudiantes")
+	
+	public Map<String, Integer> getListaDeConflictos() {
+		return listaDeConflictos;
+	}
+
+	public void setListaDeConflictos(Map<String, Integer> listaDeConflictos) {
+		this.listaDeConflictos = listaDeConflictos;
+	}
+
 	public List<Estudiante> getListaEstudiantesActivos() {
 		return listaEstudiantesActivos;
 	}
@@ -121,19 +120,22 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 		List<AsignaturaGrupo> listaAsignaturasVigentes = new ArrayList<>();
 		List<AsignaturaRequerida> listaAsignaturasPorDemanda=new ArrayList<>();
 		this.listaEstudiantesActivos=estudiantesService.obtenerListaEstudiantes();
-		listaAsignaturasPorDemanda=cursosService.obtenerListaMateriasPreinsDemanda(anio, periodo, codCarrera,"%A%");
-		listaAsignaturasVigentes=cursosService.obtenerCursosProgramados(anio, periodo, codCarrera);		
+		listaAsignaturasPorDemanda=cursosService.obtenerListaMateriasPreinsDemanda(anio, periodo, codCarrera,"%A%");		
+		listaAsignaturasVigentes=cursosService.obtenerCursosProgramados(anio, periodo, codCarrera);	
+		listaAsignaturasVigentes=removerAsignaturasSinHorario(listaAsignaturasVigentes);
 		establecerAsignaturasPorDemanda(listaEstudiantesActivos, listaAsignaturasPorDemanda);
 		establecerAsignaturasPosibles(listaEstudiantesActivos,listaAsignaturasVigentes);
-		this.listaDeConflictos=precalculateCourseConflictList(listaAsignaturasVigentes);
+		this.listaDeConflictos=precalculateCourseConflictList(listaAsignaturasVigentes);		
+		this.listaEstudiantesActivos=removerEstudiantesSinPosibilidades(this.listaEstudiantesActivos);		
 		listaProgramacionEstudiantes=constructPreSolution(this.listaEstudiantesActivos);
-		listaEstudiantesActivos=removerEstudiantesSinPosibilidades(this.listaEstudiantesActivos);
+		
 	}
 	
 	public List<EstudianteXCurso> constructPreSolution(List<Estudiante> listaEstudiantes){
 		List<EstudianteXCurso> preSolution=new ArrayList<>();
 		for (Estudiante estudiante : listaEstudiantes) {
 			Map<Long, List<AsignaturaGrupo>> agrupados=estudiante.getAsignaturasPosibles().stream().collect(Collectors.groupingBy(AsignaturaGrupo::getCodigoAsignatura));	
+			AsignaturaGrupo asignatura=null;
 			for (Entry<Long, List<AsignaturaGrupo>> entry : agrupados.entrySet()) {
 				EstudianteXCurso escur=new EstudianteXCurso();
 				escur.setEstudiante(estudiante);
@@ -141,9 +143,13 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 				preSolution.add(escur);
 			}
 		}
+		
 		return preSolution;		
 	}
 	
+	public List<AsignaturaGrupo> removerAsignaturasSinHorario(List<AsignaturaGrupo> listaTotalAsignaturas){
+		return listaTotalAsignaturas.stream().filter(e->e.getHorarios()!=null).filter(e->e.getHorarios().size()>0).collect(Collectors.toList());
+	}
 	
 	public List<Estudiante> removerEstudiantesSinPosibilidades(List<Estudiante> listaEstudiantes){
 		List<Estudiante> listaTemporal=new ArrayList<>();
@@ -184,35 +190,58 @@ public class PreinscripcionAsignaturasSolution implements Solution<HardSoftScore
 	}
 
 	
-	 private List<ConflictoCursos> precalculateCourseConflictList(List<AsignaturaGrupo> listaAsignaturasVig) {
-	        Map<String, ConflictoCursos> courseConflictList = new HashMap<String, ConflictoCursos>();
-	        for (AsignaturaGrupo leftCourse : listaAsignaturasVig) {
-	            for (AsignaturaGrupo rightCourse : listaAsignaturasVig) {
-	                if (leftCourse.getIdAsignaturaGrupo() != rightCourse.getIdAsignaturaGrupo()) {
-	                	int conflictCount = 0;	                  	                 	                    
-	                    for (Horario horizq : leftCourse.getHorarios()) {
-	                    	for (Horario horder : rightCourse.getHorarios()) {
-								if(horizq.cruze(horder)){
-									conflictCount++;
-								}
+//	 private List<ConflictoCursos> precalculateCourseConflictList(List<AsignaturaGrupo> listaAsignaturasVig) {
+//	        Map<String, ConflictoCursos> courseConflictList = new HashMap<String, ConflictoCursos>();
+//	        for (AsignaturaGrupo leftCourse : listaAsignaturasVig) {
+//	            for (AsignaturaGrupo rightCourse : listaAsignaturasVig) {
+//	                if (leftCourse.getIdAsignaturaGrupo() != rightCourse.getIdAsignaturaGrupo()) {
+//	                	int conflictCount = 0;	                  	                 	                    
+//	                    for (Horario horizq : leftCourse.getHorarios()) {
+//	                    	for (Horario horder : rightCourse.getHorarios()) {
+//								if(horizq.cruze(horder)){
+//									conflictCount++;
+//								}
+//							}
+//						}	     
+//	                    if(conflictCount>0){
+//	                    	agregarConflicto(courseConflictList, new ConflictoCursos(leftCourse, rightCourse, conflictCount));
+//	                    }	                   	                   
+//	                }
+//	            }
+//	        }	        	        	        
+//	        return new ArrayList<ConflictoCursos>(courseConflictList.values());
+//	    }
+//	
+
+	private Map<String, Integer> precalculateCourseConflictList(List<AsignaturaGrupo> listaAsignaturasVig) {
+        Map<String, Integer> courseConflictList = new HashMap<String, Integer>();
+        for (AsignaturaGrupo leftCourse : listaAsignaturasVig) {
+            for (AsignaturaGrupo rightCourse : listaAsignaturasVig) {
+                if (leftCourse.getIdAsignaturaGrupo() != rightCourse.getIdAsignaturaGrupo()) {
+                	int conflictCount = 0;	                  	                 	                    
+                    for (Horario horizq : leftCourse.getHorarios()) {
+                    	for (Horario horder : rightCourse.getHorarios()) {
+							if(horizq.cruze(horder)){
+								conflictCount++;
 							}
-						}	     
-	                    if(conflictCount>0){
-	                    	agregarConflicto(courseConflictList, new ConflictoCursos(leftCourse, rightCourse, conflictCount));
-	                    }	                   	                   
-	                }
-	            }
-	        }	        
-	        return new ArrayList<ConflictoCursos>(courseConflictList.values());
-	    }
+						}
+					}	     
+                    if(conflictCount>0){
+                    	agregarConflicto(courseConflictList,leftCourse.getIdAsignaturaGrupo(),rightCourse.getIdAsignaturaGrupo(), conflictCount);
+                    }	                   	                   
+                }
+            }
+        }	        	        	        
+        return courseConflictList;
+    }
+
 	
 	
-	 private void agregarConflicto(Map<String, ConflictoCursos> courseConflictList, ConflictoCursos conflicto){
-		 Long curseone=conflicto.getLeftCourse().getIdAsignaturaGrupo();
-		 Long cursetwo=conflicto.getRightCourse().getIdAsignaturaGrupo();
-		 String key=(curseone<cursetwo?curseone+"-"+cursetwo:cursetwo+"-"+curseone);
+	 private void agregarConflicto(Map<String, Integer> courseConflictList, Long courseone, Long coursetwo, Integer pesoConflicto){		 
+		 String key=(courseone<coursetwo?courseone+"-"+coursetwo:coursetwo+"-"+courseone);
 		 if(!courseConflictList.containsKey(key)){
-			 courseConflictList.put(key, conflicto);
+//			 Integer conflicto = courseConflictList.get(key);
+			 courseConflictList.put(key, pesoConflicto);
 		 }
 	 }
 

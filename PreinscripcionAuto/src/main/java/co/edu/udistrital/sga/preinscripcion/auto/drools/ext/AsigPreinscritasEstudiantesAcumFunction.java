@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.kie.api.runtime.rule.AccumulateFunction;
@@ -11,20 +12,9 @@ import org.kie.api.runtime.rule.AccumulateFunction;
 public class AsigPreinscritasEstudiantesAcumFunction implements AccumulateFunction {
 
 	protected static class RankingEstudiantesScoreData implements Serializable{
-        public List<Long> codigosAsignaturasInscritas = null;	      
+        public List<Long> codigosAsignaturasInscritas = new ArrayList<>();	      
 	}
 	
-	@Override
-	public void writeExternal(ObjectOutput out) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void accumulate(Serializable context, Object value) {
@@ -54,17 +44,32 @@ public class AsigPreinscritasEstudiantesAcumFunction implements AccumulateFuncti
 	@Override
 	public void init(Serializable context) throws Exception {
 		RankingEstudiantesScoreData data = (RankingEstudiantesScoreData) context;	
+		data.codigosAsignaturasInscritas.clear();
 	}
 
 	@Override
-	public void reverse(Serializable arg0, Object arg1) throws Exception {
+	public void reverse(Serializable context, Object value) throws Exception {
+		Long codigoAsignatura=(Long)value;
+		RankingEstudiantesScoreData data = (RankingEstudiantesScoreData) context;				
+		data.codigosAsignaturasInscritas.remove(codigoAsignatura);	
+	}
+
+	@Override
+	public boolean supportsReverse() {
+		return true;
+	}
+	
+
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public boolean supportsReverse() {
-		return false;
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

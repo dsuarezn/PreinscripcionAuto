@@ -2,7 +2,7 @@
 
 
 package org.edu.udistrital.sga.preinscripcion.auto.solver;
-    dialect "java"
+    dialect "mvel"
 
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.Asignatura;
@@ -20,10 +20,14 @@ import co.edu.udistrital.sga.preinscripcion.auto.domain.PlanDeEstudios;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.PreinscripcionAsignaturasSolution;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.ProyectoCurricular;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.Ubicacion;
+import co.edu.udistrital.sga.preinscripcion.auto.domain.AuxRuleWorker;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.solver.ConflictoCursos;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.Double;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collections;
 
 
 global HardSoftScoreHolder scoreHolder;
@@ -34,47 +38,100 @@ global java.lang.Integer creditosMaximos;
 		if(listaPreinsPorDemanda.size()<1){return 0D;}
 		Long valor = 0L;
 		for (Object asignaturacod : listaPreinsPorDemanda) {
-			Integer codigoAsig=(Integer)asignaturacod;
+			Long codigoAsig=(Long)asignaturacod;
 			if(listaMateriasInscritas.contains(codigoAsig)){
 				valor=valor+1;
 			}
 		}
-		return  (valor.doubleValue()/(listaPreinsPorDemanda.size()));		
+		Double completitud=(valor.doubleValue()/(listaPreinsPorDemanda.size()));
+		return  completitud;		
 	}
 
 
-	function Double calcularScoreCompletitudAsignaturas(Integer clasificacion, Double porcentajeCompletitud){
+	function Double calcularScoreCompletitudAsignaturas(Integer clasificacion, Double porcentajeCompletitud){		
 		if(clasificacion<1){
 			return 0.1 * porcentajeCompletitud;
-		}		
-		return (10/clasificacion.doubleValue())*(porcentajeCompletitud*10);
+		}	
+		Double calculo = (10/clasificacion.doubleValue())*(porcentajeCompletitud*10);	
+		return calculo;
 	}
-
-
+/*
+	function Integer scoreHorariosCompactos(List listaEstudiantesXCurso, Integer valor){
+		valor=0;
+		Integer scoreNegativoAcumulado = 0;
+		List listaHorarios=new ArrayList();
+		Map<String, List> mapaHorarios=new HashMap<>();
+		for (Object element : listaEstudiantesXCurso) {	
+			EstudianteXCurso estCurso = (EstudianteXCurso)element;							
+			for(Horario horario : estCurso.getHorarios()){	
+				List horariosDia = mapaHorarios.get(horario.getNombreDia());			
+				if(horariosDia==null){
+					horariosDia=new ArrayList();
+				}
+				horariosDia.addAll(horario.getFranjasEnteras());
+				mapaHorarios.put(horario.getNombreDia(),horariosDia);
+			}				
+		}
+		
+		for (String entradas : mapaHorarios.keySet())
+		{
+		    scoreNegativoAcumulado+=carcularScoreNegativo(mapaHorarios.get(entradas));
+		}
+		 System.out.println("-------------------inner function--------------------------:"+scoreNegativoAcumulado);		
+		return scoreNegativoAcumulado;
+	}
+	
+	function Integer carcularScoreNegativo(List espacios)
+	{
+		Collections.sort(espacios);
+		Integer valorIteracion=(Integer)espacios.get(0);
+		Integer conteo=0;
+		for(int iterador=1;iterador<espacios.size();iterador++){
+			Integer conteoInterno=0;
+			if(!espacios.get(iterador).equals(valorIteracion+1)){
+				conteoInterno=((Integer)espacios.get(iterador))-(valorIteracion+1);
+				conteo+=conteoInterno;
+			}
+			valorIteracion+=conteoInterno+1;
+		}
+		return conteo;
+	}
+	*/
 
 	// ############################################################################
 	// soft constraints
 	// ############################################################################
+	rule "peorPuntajeMasNulos" 
+	    when	     
+	       $estudianteCurso : EstudianteXCurso(curso == null, estudiante != null)
+	    then
+	       scoreHolder.addSoftConstraintMatch(kcontext, -2);
+	end
+
 	
 	rule "peorPuntajeMateriasMenosCompactas" 
 	    when
-	       $estudianteRef : Estudiante()
-	       $sumaCreditosEstudiante : Integer() from accumulate(EstudianteXCurso(estudiante == $estudianteRef,curso != null, $cursoRef : getCurso()), calcularHorariosNegativeScore($cursoRef.getHorarios()))
+	       $estudianteCurso : EstudianteXCurso(curso != null, estudiante != null, $estudianteRef : estudiante)
+	       $sumaEspacios : Integer() from accumulate(EstudianteXCurso(curso != null, estudiante == $estudianteRef, horarios != null, $horarios : horarios), calcularHorariosNegativeScore($horarios))
 	    then
-	       scoreHolder.addSoftConstraintMatch(kcontext, - $sumaCreditosEstudiante);
+	       scoreHolder.addSoftConstraintMatch(kcontext, - $sumaEspacios);
 	end
+	
+	
 	
 	rule "mejorPuntajeEstudiantesRankingAlto" 
 	    when
-	       $estudianteRef : Estudiante($listaCodigosDemanda : getListaCodigosPorDemanda())
-	       $listaCodigos : ArrayList() from accumulate(EstudianteXCurso(estudiante == $estudianteRef,curso != null, $cursoRef : getCurso()), acumularListaCodAsignatura($cursoRef.getCodigoAsignatura()))    	       
+	       $estudianteCurso : EstudianteXCurso(curso != null, estudiante != null, $estudianteRef : estudiante, $listaCodigosDemanda : listaCodigosPorDemanda)
+	       $listaCodigos : ArrayList() from accumulate(EstudianteXCurso(curso != null, estudiante != null, estudiante == $estudianteRef, $cursoRef : curso), acumularListaCodAsignatura($cursoRef.getCodigoAsignatura()))    	       
 	    then
 	       scoreHolder.addSoftConstraintMatch(kcontext,calcularScoreCompletitudAsignaturas($estudianteRef.getClasificacion(),valorarCompletitudAsignaturas($listaCodigos, $listaCodigosDemanda)).intValue());
+	       //scoreHolder.addSoftConstraintMatch(kcontext,calcularScoreCompletitudAsignaturas($estudianteRef.getClasificacion(),12).intValue());
 	end
-	
+/*	
 	rule "mejorAsignaturasProgramadasRanking" 
 	    when
 	       $estudiantexCurso : EstudianteXCurso($cursoleft : curso, $estudiante : estudiante, estudiante != null, curso !=null)       
 	    then
 	       scoreHolder.addSoftConstraintMatch(kcontext, ($cursoleft.getRanking()/100));
 	end
+*/
