@@ -16,10 +16,10 @@ public class AcinPK implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="INS_ANO")
-	private long insAno;
+	private Integer insAno;
 
 	@Column(name="INS_PER")
-	private long insPer;
+	private Integer insPer;
 
 	@Column(name="INS_EST_COD")
 	private long insEstCod;

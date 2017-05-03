@@ -22,7 +22,7 @@ public class Acinsdemanda implements Serializable {
 	private AcinsdemandaPK id;
 
 	@Column(name="INSDE_CEA_COD")
-	private BigDecimal insdeCeaCod;
+	private Integer insdeCeaCod;
 
 	@Column(name="INSDE_CRA_COD")
 	private Long insdeCraCod;
@@ -49,7 +49,7 @@ public class Acinsdemanda implements Serializable {
 	private String insdePerdido;
 
 	@Column(name="INSDE_SEM")
-	private BigDecimal insdeSem;
+	private Integer insdeSem;
 
 	public Acinsdemanda() {
 	}

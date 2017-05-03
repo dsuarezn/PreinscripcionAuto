@@ -8,9 +8,11 @@
 		<scoreDrl>co/edu/udistrital/sga/preinscripcion/auto/solver/SoftConstraintsScoreRules.drl</scoreDrl>
 	</scoreDirectorFactory>
 	<localSearch>
+		<localSearchType>HILL_CLIMBING</localSearchType>
 		<termination>
-			<secondsSpentLimit>180</secondsSpentLimit>
-			<!-- <bestScoreLimit>0hard/0soft</bestScoreLimit> -->
+			<terminationCompositionStyle>AND</terminationCompositionStyle>
+			<minutesSpentLimit>4</minutesSpentLimit>
+			<bestScoreLimit>0hard/0soft</bestScoreLimit>
 		</termination>		
 	</localSearch>
 </solver>

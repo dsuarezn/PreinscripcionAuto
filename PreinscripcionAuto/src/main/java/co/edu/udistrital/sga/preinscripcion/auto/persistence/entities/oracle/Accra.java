@@ -86,9 +86,9 @@ public class Accra implements Serializable {
 	@OneToMany(mappedBy="accra")
 	private List<Acest> acests;
 
-	//bi-directional many-to-one association to Acin
-	@OneToMany(mappedBy="accra")
-	private List<Acin> acins;
+//	//bi-directional many-to-one association to Acin
+//	@OneToMany(mappedBy="accra")
+//	private List<Acin> acins;
 
 	public Accra() {
 	}

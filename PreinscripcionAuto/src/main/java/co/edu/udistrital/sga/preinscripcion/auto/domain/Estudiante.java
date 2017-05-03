@@ -26,6 +26,7 @@ public class Estudiante extends AbstractPersistable{
 
 	private List<AsignaturaRequerida> preinscripcionPorDemanda;	
 	private List<AsignaturaGrupo> asignaturasPosibles;
+	private List<Long> asignaturasHomologadoras;
 	private List<AsignaturaGrupo> asignaturasProgramadas;
 	private Long codigo;
 	private Pensum m_Pensum;
@@ -35,10 +36,6 @@ public class Estudiante extends AbstractPersistable{
 	private String nombre;
 	private Integer clasificacion;
 	private String tipo;
-	
-//	private Integer periodoIngreso;
-//	private Integer creditosMaximosPorPeriodo;
-//	sdasdas
 	
 
 	public Estudiante(){
@@ -62,50 +59,18 @@ public class Estudiante extends AbstractPersistable{
 		return true;
 	}
 
-//	public static Double valorarCompletitudAsignaturas(List<Integer> listaMateriasInscritas, List<Integer> listaPreinsPorDemanda){
-//		if(listaMateriasInscritas.size()<1){return 0D;}
-//		if(listaPreinsPorDemanda.size()<1){return 0D;}
-//		Long valor = 0L;
-//		for (Integer asignaturacod : listaPreinsPorDemanda) {
-//			if(listaMateriasInscritas.contains(asignaturacod)){
-//				valor++;
-//			}
-//		}
-//		return (double) (valor.doubleValue()/((double)listaPreinsPorDemanda.size()));		
-//	}
+
 
 	public List<Long> getListaCodigosPorDemanda(){
 		if(preinscripcionPorDemanda!=null){
-			return preinscripcionPorDemanda.stream().map(AsignaturaRequerida::getCodigoAsignatura).collect(Collectors.toList());			
+			List<Long> listaCodigos=preinscripcionPorDemanda.stream().map(AsignaturaRequerida::getCodigoAsignatura).collect(Collectors.toList());			
+			if(asignaturasHomologadoras!=null){
+				listaCodigos.addAll(asignaturasHomologadoras);
+			}
+			return listaCodigos;
 		}
 		return null;
 	}
-//	@Test
-//	public void test(){
-//		List<Integer> listaPorDemanda=new ArrayList<>();
-//		listaPorDemanda.add(75896);
-//		listaPorDemanda.add(50236);
-//		listaPorDemanda.add(47589);
-//		listaPorDemanda.add(67890);
-//		List<Integer> listaPreinscrita=new ArrayList<>();
-//		listaPreinscrita.add(75896);
-//		listaPreinscrita.add(50236);
-////		listaPreinscrita.add(47589);
-//		System.out.println(valorarCompletitudAsignaturas(listaPreinscrita, listaPorDemanda));
-//	}
-	
-//	@Test
-//	public void test(){	
-//		System.out.println(valorarCompletitudAsignaturas(1, 0.5));
-//	}
-
-
-//	public static Double valorarCompletitudAsignaturas(Integer clasificacion, Double porcentajeCompletitud){
-//		if(clasificacion<1){
-//			return 0.1 * porcentajeCompletitud;
-//		}		
-//		return (100/clasificacion.doubleValue())*(porcentajeCompletitud);			
-//	}
 	
 	@Override
 	public String toString(){

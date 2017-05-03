@@ -15,7 +15,7 @@ import co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle.Aci
 @Repository
 public interface AcinsdemandaRepository extends JpaRepository<Acinsdemanda, AcinsdemandaPK> {
 	
-	@Query("select NEW co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaRequerida(ad.insdeCred,ad.id.insdeAsiCod,ad.insdeEstado,ad.id.insdePer,ad.id.insdeAno,ad.id.insdeEstCod) from Acinsdemanda ad where ad.id.insdeAno=:anio and ad.id.insdePer=:periodo and ad.insdeCraCod=:codigoCarrera and ad.insdeEstado like %:estado%")
+	@Query("select NEW co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaRequerida(ad.insdeCred,ad.id.insdeAsiCod,ad.insdeEstado,ad.id.insdePer,ad.id.insdeAno,ad.id.insdeEstCod, ad.insdeSem, ad.insdeCeaCod) from Acinsdemanda ad where ad.id.insdeAno=:anio and ad.id.insdePer=:periodo and ad.insdeCraCod=:codigoCarrera and ad.insdeEstado like %:estado%")
 	public List<AsignaturaRequerida> obtenerListaAsignaturasPreinsPorDemamda(@Param("anio") Integer anio, @Param("periodo") Integer periodo, @Param("codigoCarrera") Long codigoCarrera,@Param("estado")String estado);
 	
 }

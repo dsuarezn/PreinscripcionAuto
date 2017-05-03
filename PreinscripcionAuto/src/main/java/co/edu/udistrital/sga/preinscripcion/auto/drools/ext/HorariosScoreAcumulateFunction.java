@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.junit.Test;
 import org.kie.api.runtime.rule.AccumulateFunction;
 
 import co.edu.udistrital.sga.preinscripcion.auto.domain.Horario;
@@ -97,14 +98,16 @@ public class HorariosScoreAcumulateFunction implements AccumulateFunction {
 		return conteo;
 	}
 
-//	@Test
-//	public void test(){
-//		List<Integer> lista=new ArrayList<>();
-//		lista.add(6);
-//
-//		lista.add(18);
-//		System.out.println("calculo:"+carcularScoreNegativo(lista));
-//	}
+	@Test
+	public void test(){
+		List<Integer> lista=new ArrayList<>();
+		lista.add(11);
+		lista.add(14);
+		lista.add(17);
+		lista.add(18);
+		
+		System.out.println("calculo:"+carcularScoreNegativo(lista));
+	}
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
 		// TODO Auto-generated method stub

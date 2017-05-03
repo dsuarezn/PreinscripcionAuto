@@ -50,6 +50,11 @@ public class EstudianteXCurso extends AbstractPersistable {
 	public Long getCodigoAsignatura(){
 		return curso.getCodigoAsignatura();
 	}
+	
+	public Long getCodigoCarreraAsignatura(){
+		return curso.getCodCarrera();
+	}
+	
 	public Long getEstudianteCodigo(){
 		return estudiante.getCodigo();
 	}
@@ -79,6 +84,8 @@ public class EstudianteXCurso extends AbstractPersistable {
 		return curso.getHorarios();
 	}
 	
-	
+	public Integer getRanking(){
+		return curso.getRanking();
+	}
 	
 }

@@ -22,19 +22,19 @@ public class Acinspre implements Serializable {
 	private AcinsprePK id;
 
 	@Column(name="INS_CEA_COD")
-	private BigDecimal insCeaCod;
+	private Integer insCeaCod;
 
 	@Column(name="INS_CRED")
-	private BigDecimal insCred;
+	private Integer insCred;
 
 	@Column(name="INS_ESTADO")
 	private String insEstado;
 
 	@Column(name="INS_GR")
-	private BigDecimal insGr;
+	private Long insGr;
 
 	@Column(name="INS_HOR_ALTERNATIVO")
-	private BigDecimal insHorAlternativo;
+	private Integer insHorAlternativo;
 
 	@Column(name="INS_NRO_AUT")
 	private BigDecimal insNroAut;
@@ -46,7 +46,7 @@ public class Acinspre implements Serializable {
 	private BigDecimal insNroHt;
 
 	@Column(name="INS_SEM")
-	private BigDecimal insSem;
+	private Integer insSem;
 
 	public Acinspre() {
 	}

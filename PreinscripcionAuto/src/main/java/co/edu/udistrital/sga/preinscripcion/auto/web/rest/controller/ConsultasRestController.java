@@ -15,7 +15,7 @@ import co.edu.udistrital.sga.preinscripcion.auto.domain.ProyectoCurricular;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.solver.PreinscripcionAutomaticaSolverManagerImpl;
 import co.edu.udistrital.sga.preinscripcion.auto.services.CursosService;
 import co.edu.udistrital.sga.preinscripcion.auto.services.EstudiantesService;
-import co.edu.udistrital.sga.preinscripcion.auto.services.ProyectoService;
+import co.edu.udistrital.sga.preinscripcion.auto.services.ControlService;
 
 
 @RestController
@@ -23,7 +23,7 @@ import co.edu.udistrital.sga.preinscripcion.auto.services.ProyectoService;
 public class ConsultasRestController {
 
 	@Autowired
-    private ProyectoService proyectoService;
+    private ControlService proyectoService;
 	@Autowired
     private CursosService cursosService;
 	@Autowired
@@ -48,11 +48,11 @@ public class ConsultasRestController {
     public @ResponseBody List<AsignaturaRequerida> consultarAsignaturasPorDemanda() {     	    	
 		return cursosService.obtenerListaMateriasPreinsDemanda(2017, 1, 25L,"%A%");
     }
-	
-	@RequestMapping(value = "/preins", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<AsignaturaRequerida> consultarAsignaturasInsPre() {     	    	
-		return cursosService.obtenerListaMateriasPreinsPre(2017, 1, 25L,"%A%");
-    }
+//	
+//	@RequestMapping(value = "/preins", method = RequestMethod.GET, produces = "application/json")
+//    public @ResponseBody List<AsignaturaRequerida> consultarAsignaturasInsPre() {     	    	
+//		return cursosService.obtenerListaMateriasPreinsPre(2017, 1, 25L,"%A%");
+//    }
 	
 	
 }

@@ -12,9 +12,9 @@ public interface PreinscripcionAutomaticaSolverManager extends Serializable{
 	
 	public PreinscripcionAsignaturasSolution retrieveOrCreateSolution(String sessionid, Integer anio, Integer periodo, Long codCarrera);
 	
-	public boolean solve(final String sessionid, Integer anio, Integer periodo, Long codCarrera);
+	public boolean solve(final String sessionid, Integer anio, Integer periodo, Long codCarrera, Integer minutos);
 	
 	public boolean terminateEarly(String sessionid);
 	
-	public PreinscripcionAsignaturasSolution testSolver();
+//	public PreinscripcionAsignaturasSolution testSolver();
 }

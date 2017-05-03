@@ -16,19 +16,19 @@ public class AcinsprePK implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="INS_ANO")
-	private long insAno;
+	private Integer insAno;
 
 	@Column(name="INS_PER")
-	private long insPer;
+	private Integer insPer;
 
 	@Column(name="INS_CRA_COD")
-	private long insCraCod;
+	private Long insCraCod;
 
 	@Column(name="INS_EST_COD")
-	private long insEstCod;
+	private Long insEstCod;
 
 	@Column(name="INS_ASI_COD")
-	private long insAsiCod;
+	private Long insAsiCod;
 
 	public AcinsprePK() {
 	}

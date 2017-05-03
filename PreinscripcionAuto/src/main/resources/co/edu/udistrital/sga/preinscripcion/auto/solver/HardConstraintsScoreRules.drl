@@ -33,6 +33,10 @@ global java.lang.Integer creditosMaximos;
 		return key;
 	}
 	
+	function String buildKeyInverse(Integer courseIdOne, Integer courseIdTwo){
+		String key=(courseIdOne<courseIdTwo?courseIdTwo+"-"+courseIdOne:courseIdOne+"-"+courseIdTwo);	
+		return key;
+	}
 
 // ############################################################################
 // Hard constraints
@@ -82,6 +86,16 @@ rule "noPermitirCursosMismoHorario"
         scoreHolder.addHardConstraintMatch(kcontext, -2);
 end
 
+rule "noPermitirCursosHomologados"
+    when       
+       $leftEstudianteCurso : EstudianteXCurso(curso != null, estudiante!= null, $leftCourseId : idAsignaturaGrupo, $codigoAlumno : estudianteCodigo )       
+       $rightEstudianteCurso : EstudianteXCurso(curso != null, estudiante!= null, $rightCourseId : idAsignaturaGrupo, idAsignaturaGrupo != $leftCourseId,  estudianteCodigo  == $codigoAlumno )              
+       eval($leftEstudianteCurso != $rightEstudianteCurso)
+       $mapa : Map(this[buildKeyInverse($leftCourseId,$rightCourseId)] > 0);       
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -2);
+end
+
 rule "estudianteNoPuedeExcederCreditos" 
     when    
        $leftEstudianteCurso : EstudianteXCurso(curso != null, estudiante!= null, $estudianteRef : estudiante )  
@@ -95,7 +109,7 @@ end
 rule "cursosNoSobreOcupados" 
     when
        $estudianteCurso : EstudianteXCurso(curso != null, $cursoReferencia : curso, $cuposCurso : cupos)
-       $estudiantesProgramadosCount : Long() from accumulate($cursoReferenciado : EstudianteXCurso(curso != null,curso == $cursoReferencia, estudiante != null), count($cursoReferenciado))       
+       $estudiantesProgramadosCount : Long() from accumulate($cursoReferenciado : EstudianteXCurso(curso != null, estudiante != null,curso == $cursoReferencia, $estudianteCount : estudiante), count($estudianteCount))       
        eval($cuposCurso<$estudiantesProgramadosCount.intValue())
     then
         scoreHolder.addHardConstraintMatch(kcontext, -2);

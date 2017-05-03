@@ -41,6 +41,9 @@ public class AsignaturaGrupo extends AbstractPersistable {
 	private Long codigoGrupo;
 	private Integer creditos;
 	private Integer ranking;
+	private Integer semestre;
+	private Integer ceaCode;
+	private Long codCarrera;
 	
 
 	public AsignaturaGrupo(){
@@ -74,7 +77,9 @@ public class AsignaturaGrupo extends AbstractPersistable {
 		this.codigoUbicacion = curso.getCurDepCod();
 		this.codigoGrupo = curso.getCurGrupo();
 		this.horarios=obtenerHorarioAchorarios(curso.getAchorarios());
+		this.codCarrera=curso.getCurCraCod();
 		this.ranking=0;
+		
 		
 	}
 	
@@ -118,9 +123,9 @@ public class AsignaturaGrupo extends AbstractPersistable {
 	}
 	
 	
-	public void setCreditosOptional(Optional<Integer> value){
-		this.creditos=value.get();
-	}
+//	public void setCreditosOptional(Optional<Integer> value){
+//		this.creditos=value.get();
+//	}
 	
 	@Override
 	public String toString(){

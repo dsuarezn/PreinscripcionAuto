@@ -18,24 +18,28 @@ import java.math.BigDecimal;
 @NamedQuery(name="Acin.findAll", query="SELECT a FROM Acin a")
 public class Acin implements Serializable {
 	private static final long serialVersionUID = 1L;
+		
 
 	@EmbeddedId
 	private AcinPK id;
 
+	@Column(name="INS_CRA_COD")
+	private Long insCraCod;
+	
 	@Column(name="INS_CEA_COD")
-	private BigDecimal insCeaCod;
+	private Integer insCeaCod;
 
 	@Column(name="INS_CRED")
-	private BigDecimal insCred;
+	private Integer insCred;
 
 	@Column(name="INS_ESTADO")
 	private String insEstado;
 
 	@Column(name="INS_GR")
-	private BigDecimal insGr;
+	private Long insGr;
 
 	@Column(name="INS_HOR_ALTERNATIVO")
-	private BigDecimal insHorAlternativo;
+	private Integer insHorAlternativo;
 
 	@Column(name="INS_NOTA")
 	private BigDecimal insNota;
@@ -86,25 +90,45 @@ public class Acin implements Serializable {
 	private BigDecimal insSecuencia;
 
 	@Column(name="INS_SEM")
-	private BigDecimal insSem;
+	private Integer insSem;
 
 	@Column(name="INS_TOT_FALLAS")
-	private BigDecimal insTotFallas;
+	private Integer insTotFallas;
 
 	@Column(name="INS_USUARIO")
 	private String insUsuario;
 
 	//bi-directional many-to-one association to Accra
-	@ManyToOne
-	@JoinColumn(name="INS_CRA_COD", insertable = false, updatable = false)
-	private Accra accra;
+//	@ManyToOne
+//	@JoinColumn(name="INS_CRA_COD", insertable = false, updatable = false)
+//	private Accra accra;
 
 	//bi-directional many-to-one association to Acest
 	@ManyToOne
 	@JoinColumn(name="INS_EST_COD", insertable = false, updatable = false)
 	private Acest acest;
 
-	public Acin() {
+	public Acin(Acinspre acinspre) {
+		AcinPK pk=new AcinPK();
+		pk.setInsAno(acinspre.getId().getInsAno());
+		pk.setInsPer(acinspre.getId().getInsPer());
+		pk.setInsEstCod(acinspre.getId().getInsEstCod());
+		pk.setInsAsiCod(acinspre.getId().getInsAsiCod());
+		this.setId(pk);
+		this.setInsCraCod(acinspre.getId().getInsCraCod());
+		this.setInsGr(acinspre.getInsGr());
+		this.setInsCred(acinspre.getInsCred());
+		this.setInsSem(acinspre.getInsSem());
+		this.setInsCeaCod(acinspre.getInsCeaCod());
+		this.setInsEstado(acinspre.getInsEstado());
+		this.setInsHorAlternativo(acinspre.getInsHorAlternativo());
+		this.setInsTotFallas(0);
 	}
+
+	public Acin() {
+		
+	}
+	
+	
 
 }
