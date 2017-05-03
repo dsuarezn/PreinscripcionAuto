@@ -9,8 +9,9 @@ import co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.mysql.SgaE
 public interface ControlService {
 
 	List<ProyectoCurricular> obtenerProyectosCoordinador(long codigoCarrera);
-	
-	public void setUpdateEventoInscripcionAutomatica(Long codigoCarrera, Integer anio, Integer periodo, EstadoProcesoPlanificacion estado);
-	public SgaEjecutaInscripcionAuto obtenerEvento(Long codigoCarrera, Integer anio, Integer periodo);
-	
+
+	SgaEjecutaInscripcionAuto obtenerEvento(Long codigoCarrera, Integer anio, Integer periodo);
+
+	void setUpdateEventoInscripcionAutomatica(Long codigoCarrera, Integer anio, Integer periodo,
+			EstadoProcesoPlanificacion estado);
 }

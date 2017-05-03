@@ -1,17 +1,11 @@
 package co.edu.udistrital.sga.preinscripcion.auto.domain;
 
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
-import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
 import co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle.Accurso;
 import co.edu.udistrital.sga.preinscripcion.auto.persistence.entities.oracle.Achorario;
 import lombok.Getter;
@@ -27,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 //@XStreamAlias("AsignaturaGrupo")
-public class AsignaturaGrupo extends AbstractPersistable {
+public class AsignaturaGrupo  {
 	
 	private Long idAsignaturaGrupo;
 //	private Asignatura asignatura;
@@ -35,8 +29,7 @@ public class AsignaturaGrupo extends AbstractPersistable {
 	private Integer cupos;	
 	private Integer inscritos;
 	private Integer capacidadMaxima;
-	private List<Horario> horarios;
-	private Ubicacion ubicacion;
+	private List<Horario> horarios;	
 	private Long codigoUbicacion;
 	private Long codigoGrupo;
 	private Integer creditos;

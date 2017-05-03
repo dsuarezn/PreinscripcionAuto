@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
-import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
 import lombok.Data;
 
 
@@ -17,7 +14,7 @@ import lombok.Data;
  */
 @Data
 //@XStreamAlias("Horario")
-public class Horario extends AbstractPersistable {
+public class Horario {
 
 	private DiasSemana diaSemana;
 	public List<IntervaloDeTiempo> m_Franjas;

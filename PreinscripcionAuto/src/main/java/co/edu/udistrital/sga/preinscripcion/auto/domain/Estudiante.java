@@ -1,17 +1,10 @@
 package co.edu.udistrital.sga.preinscripcion.auto.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
-import org.optaplanner.core.api.domain.entity.PlanningEntity;
-import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * @author Alexander
@@ -22,16 +15,14 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @Getter
 @Setter
 //@XStreamAlias("Estudiante")
-public class Estudiante extends AbstractPersistable{
+public class Estudiante {
 
 	private List<AsignaturaRequerida> preinscripcionPorDemanda;	
 	private List<AsignaturaGrupo> asignaturasPosibles;
 	private List<Long> asignaturasHomologadoras;
 	private List<AsignaturaGrupo> asignaturasProgramadas;
-	private Long codigo;
-	private Pensum m_Pensum;
-	private Integer codigoPensum;
-	private ProyectoCurricular m_ProyectoCurricular;
+	private Long codigo;	
+	private Integer codigoPensum;	
 	private Long codigoProyectoCurricular;
 	private String nombre;
 	private Integer clasificacion;

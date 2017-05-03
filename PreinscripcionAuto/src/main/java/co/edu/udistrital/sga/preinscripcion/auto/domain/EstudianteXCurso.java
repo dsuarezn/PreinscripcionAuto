@@ -1,21 +1,17 @@
 package co.edu.udistrital.sga.preinscripcion.auto.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
-import co.edu.udistrital.sga.preinscripcion.auto.common.domain.AbstractPersistable;
-
 @PlanningEntity
 //@XStreamAlias("ProgramacionEstudiante")
-public class EstudianteXCurso extends AbstractPersistable {
+public class EstudianteXCurso {
 
 	private Estudiante estudiante;
-	private AsignaturaGrupo curso;
-	private List<Problema> listaProblemas;
+	private AsignaturaGrupo curso;	
 	
 	public Estudiante getEstudiante() {
 		return estudiante;
@@ -64,12 +60,7 @@ public class EstudianteXCurso extends AbstractPersistable {
 		
 	}
 	
-	public void addProblem(String regla, Object...listaObjetos ){
-		if(listaProblemas==null){
-			listaProblemas=new ArrayList<>();
-		}
-		Problema problema=new Problema(regla, listaObjetos);
-	}
+
 	
 	public Integer getCreditos(){
 		return curso.getCreditos();

@@ -4,22 +4,23 @@ package org.edu.udistrital.sga.preinscripcion.auto.solver;
     dialect "mvel"
 
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
-import co.edu.udistrital.sga.preinscripcion.auto.domain.Asignatura;
+
 import co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaGrupo;
-import co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaPlaneada;
+
 import co.edu.udistrital.sga.preinscripcion.auto.domain.AsignaturaRequerida;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.DiasSemana;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.Estudiante;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.EstudianteXCurso;
-import co.edu.udistrital.sga.preinscripcion.auto.domain.Grupo;
+
 import co.edu.udistrital.sga.preinscripcion.auto.domain.Horario;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.IntervaloDeTiempo;
-import co.edu.udistrital.sga.preinscripcion.auto.domain.Pensum;
-import co.edu.udistrital.sga.preinscripcion.auto.domain.PlanDeEstudios;
-import co.edu.udistrital.sga.preinscripcion.auto.domain.PreinscripcionAsignaturasSolution;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.ProyectoCurricular;
 import co.edu.udistrital.sga.preinscripcion.auto.domain.Ubicacion;
-import co.edu.udistrital.sga.preinscripcion.auto.domain.solver.ConflictoCursos;
+
+import co.edu.udistrital.sga.preinscripcion.auto.domain.PreinscripcionAsignaturasSolution;
+
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
